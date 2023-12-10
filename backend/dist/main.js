@@ -1171,7 +1171,7 @@ let EmailService = class EmailService {
         const { email, name, surname, redirectUri } = params;
         await this.mailerService.sendMail({
             to: email,
-            subject: 'Twitter',
+            subject: 'TreeShop',
             template: './auth-message',
             context: {
                 redirectUri,
@@ -3438,7 +3438,7 @@ async function bootstrap() {
     }));
     const builder = new swagger_1.DocumentBuilder()
         .addBearerAuth()
-        .setTitle('Twitter')
+        .setTitle('TreeShop')
         .setDescription('Some description')
         .setVersion('1.0')
         .build();

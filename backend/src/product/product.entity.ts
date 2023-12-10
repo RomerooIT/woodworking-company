@@ -5,7 +5,7 @@ enum MaterialtTypeEnum {
   metal = 'metal'
 }
 
-@Entity()
+@Entity({name: 'Product'})
 export class ProductEntity {
   @PrimaryGeneratedColumn()
   id: number;

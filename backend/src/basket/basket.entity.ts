@@ -1,7 +1,7 @@
 import { RequestEntity } from 'src/request/request.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity({name: 'Basket'})
 export class BasketEntity {
   @PrimaryGeneratedColumn()
   id: number;
