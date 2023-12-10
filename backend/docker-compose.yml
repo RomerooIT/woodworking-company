@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   postgres:
-    container_name: treeShopCourse
+    container_name: treeShopCourseProject
     image: postgres:14
     ports:
       - ${POSTGRES_PORT:?err}:5432
