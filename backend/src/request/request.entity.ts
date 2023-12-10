@@ -4,7 +4,7 @@ import { UserEntity } from 'src/users/entity/user.entity';
 import { WorkerEntity } from 'src/worker/worker.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity({name: 'Request'})
 export class RequestEntity {
   @PrimaryGeneratedColumn()
   id: number;

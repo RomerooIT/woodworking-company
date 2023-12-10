@@ -38,7 +38,7 @@ async function bootstrap() {
   // swagger
   const builder = new DocumentBuilder()
     .addBearerAuth()
-    .setTitle('Twitter')
+    .setTitle('TreeShop')
     .setDescription('Some description')
     .setVersion('1.0')
     .build();

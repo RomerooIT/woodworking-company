@@ -17,7 +17,7 @@ export class EmailService {
 
     await this.mailerService.sendMail({
       to: email,
-      subject: 'Twitter',
+      subject: 'TreeShop',
       template: './auth-message', // `.hbs` extension is appended automatically
       context: {
         redirectUri,
