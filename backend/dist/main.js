@@ -1776,7 +1776,7 @@ __decorate([
     __metadata("design:type", typeof (_a = typeof request_entity_1.RequestEntity !== "undefined" && request_entity_1.RequestEntity) === "function" ? _a : Object)
 ], BasketEntity.prototype, "request", void 0);
 BasketEntity = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)({ name: 'Basket' })
 ], BasketEntity);
 exports.BasketEntity = BasketEntity;
 
@@ -1939,7 +1939,7 @@ __decorate([
     __metadata("design:type", Number)
 ], ProductEntity.prototype, "price", void 0);
 ProductEntity = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)({ name: 'Product' })
 ], ProductEntity);
 exports.ProductEntity = ProductEntity;
 
@@ -2122,7 +2122,7 @@ __decorate([
     __metadata("design:type", typeof (_d = typeof worker_entity_1.WorkerEntity !== "undefined" && worker_entity_1.WorkerEntity) === "function" ? _d : Object)
 ], RequestEntity.prototype, "worker", void 0);
 RequestEntity = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)({ name: 'Request' })
 ], RequestEntity);
 exports.RequestEntity = RequestEntity;
 
@@ -2589,7 +2589,7 @@ __decorate([
     __metadata("design:type", String)
 ], SupportEntity.prototype, "question", void 0);
 SupportEntity = __decorate([
-    (0, typeorm_1.Entity)({})
+    (0, typeorm_1.Entity)({ name: 'Support' })
 ], SupportEntity);
 exports.SupportEntity = SupportEntity;
 
@@ -2750,6 +2750,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserEntity = void 0;
+const core_1 = __webpack_require__(/*! src/auth/core */ "./src/auth/core/index.ts");
 const basket_entity_1 = __webpack_require__(/*! src/basket/basket.entity */ "./src/basket/basket.entity.ts");
 const support_entity_1 = __webpack_require__(/*! src/support/support.entity */ "./src/support/support.entity.ts");
 const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
@@ -2768,7 +2769,7 @@ __decorate([
     __metadata("design:type", String)
 ], UserEntity.prototype, "name", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: false }),
+    (0, typeorm_1.Column)({ nullable: false, default: core_1.Roles.User }),
     __metadata("design:type", String)
 ], UserEntity.prototype, "role", void 0);
 __decorate([
@@ -3078,7 +3079,7 @@ __decorate([
     __metadata("design:type", typeof (_a = typeof request_entity_1.RequestEntity !== "undefined" && request_entity_1.RequestEntity) === "function" ? _a : Object)
 ], WorkerEntity.prototype, "worker", void 0);
 WorkerEntity = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)({ name: 'Worker' })
 ], WorkerEntity);
 exports.WorkerEntity = WorkerEntity;
 
