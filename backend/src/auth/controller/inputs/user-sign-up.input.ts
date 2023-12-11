@@ -21,11 +21,6 @@ export class UserSignUpInput {
   @ApiProperty({ type: String, required: true })
   @IsString()
   @IsNotEmpty()
-  middleName: string;
-
-  @ApiProperty({ type: String, required: true })
-  @IsString()
-  @IsNotEmpty()
   @Length(5, 10)
   password: string;
 }

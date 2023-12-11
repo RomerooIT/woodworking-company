@@ -44,12 +44,11 @@ export class AuthService {
   ) {}
 
   async signUp(params: UserSignUpParams): Promise<UserSignUpResult> {
-    const { email, middleName, name, surname, password } = params;
+    const { email, name, surname, password } = params;
 
     try {
       const { data } = await this.userService.createUser({
         email,
-        middleName,
         name,
         surname,
       });

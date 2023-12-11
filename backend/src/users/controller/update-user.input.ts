@@ -17,9 +17,4 @@ export class UpdateUserInput {
   @IsString()
   @IsOptional()
   surname?: string;
-
-  @ApiProperty({ type: String, nullable: true })
-  @IsString()
-  @IsOptional()
-  middleName?: string;
 }
