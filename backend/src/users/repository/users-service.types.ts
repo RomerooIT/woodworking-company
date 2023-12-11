@@ -11,7 +11,7 @@ export interface GetUserByNameParams {
 }
 
 export interface UpdateUserParams
-  extends Partial<Pick<IUser, 'email' | 'middleName' | 'name' | 'surname'>> {
+  extends Partial<Pick<IUser, 'email' | 'name' | 'surname'>> {
   userId: number;
 }
 

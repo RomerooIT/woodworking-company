@@ -711,12 +711,6 @@ __decorate([
     (0, swagger_1.ApiProperty)({ type: String, required: true }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], UserSignUpInput.prototype, "middleName", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ type: String, required: true }),
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.Length)(5, 10),
     __metadata("design:type", String)
 ], UserSignUpInput.prototype, "password", void 0);
@@ -1412,11 +1406,10 @@ let AuthService = class AuthService {
         this.sessionService = sessionService;
     }
     async signUp(params) {
-        const { email, middleName, name, surname, password } = params;
+        const { email, name, surname, password } = params;
         try {
             const { data } = await this.userService.createUser({
                 email,
-                middleName,
                 name,
                 surname,
             });
