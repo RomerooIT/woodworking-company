@@ -1,22 +1,9 @@
 import { Body, Controller, Get, Param, Post, Put, UseGuards, Delete, BadRequestException, Req } from '@nestjs/common';
-import { ApiBearerAuth, ApiConsumes, ApiProperty, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from 'src/auth/guards';
+import { ApiTags } from '@nestjs/swagger';
 import { ProductService } from './product.service';
 import { ProductEntity } from './product.entity';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-export class CreateProductDto {
-  @ApiProperty({ type: String, nullable: false, required: true })
-  @IsString()
-  material: string;
+import { ProductDto } from './input/product.input';
 
-  @ApiProperty({ type: String, nullable: false, required: true })
-  @IsString()
-  materialtType: string;
-
-  @ApiProperty({ type: Number, nullable: false, required: true })
-  @IsNumber()
-  price: number;
-}
 
 
 @ApiTags('Product')
@@ -27,7 +14,7 @@ export class ProductController {
   @Post()
   //@ApiConsumes('application/json')
   async createProduct(
-    @Body() params: CreateProductDto,
+    @Body() params: ProductDto,
   ): Promise<ProductEntity> {
     const {material, materialtType, price} = params
 
@@ -57,14 +44,17 @@ export class ProductController {
     return this.productService.getProduct(id);
   }
 
-  @Put(':id')
-  async updateProduct(
-    @Param('id') id: number,
-    @Body() product: ProductEntity
-  ): Promise<ProductEntity> {
-    product.id = id;
-    return this.productService.updateProduct(product);
-  }
+  @Put('/:id')
+    async updateProduct(@Param('id') id: number, @Body() productDto: ProductDto) {
+        const currentProduct = await this.productService.getProduct(id);
+        if (!currentProduct) {
+            return null;
+        }
+        return this.productService.updateProduct( id,{
+            ...currentProduct,
+            ...productDto,
+        });
+    }
 
   @Delete(':id')
   async deleteProduct(@Param('id') id: number): Promise<void> {

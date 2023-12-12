@@ -1849,6 +1849,48 @@ exports.BasketService = BasketService;
 
 /***/ }),
 
+/***/ "./src/product/input/product.input.ts":
+/*!********************************************!*\
+  !*** ./src/product/input/product.input.ts ***!
+  \********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ProductDto = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
+class ProductDto {
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: String, nullable: false, required: true }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ProductDto.prototype, "material", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: String, nullable: false, required: true }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ProductDto.prototype, "materialtType", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: Number, nullable: false, required: true }),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], ProductDto.prototype, "price", void 0);
+exports.ProductDto = ProductDto;
+
+
+/***/ }),
+
 /***/ "./src/product/product.constroller.ts":
 /*!********************************************!*\
   !*** ./src/product/product.constroller.ts ***!
@@ -1870,30 +1912,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 var _a, _b, _c, _d, _e, _f, _g;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ProductController = exports.CreateProductDto = void 0;
+exports.ProductController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
 const product_service_1 = __webpack_require__(/*! ./product.service */ "./src/product/product.service.ts");
-const product_entity_1 = __webpack_require__(/*! ./product.entity */ "./src/product/product.entity.ts");
-const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
-class CreateProductDto {
-}
-__decorate([
-    (0, swagger_1.ApiProperty)({ type: String, nullable: false, required: true }),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateProductDto.prototype, "material", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ type: String, nullable: false, required: true }),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateProductDto.prototype, "materialtType", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ type: Number, nullable: false, required: true }),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], CreateProductDto.prototype, "price", void 0);
-exports.CreateProductDto = CreateProductDto;
+const product_input_1 = __webpack_require__(/*! ./input/product.input */ "./src/product/input/product.input.ts");
 let ProductController = class ProductController {
     constructor(productService) {
         this.productService = productService;
@@ -1918,9 +1941,12 @@ let ProductController = class ProductController {
     async getProduct(id) {
         return this.productService.getProduct(id);
     }
-    async updateProduct(id, product) {
-        product.id = id;
-        return this.productService.updateProduct(product);
+    async updateProduct(id, productDto) {
+        const currentProduct = await this.productService.getProduct(id);
+        if (!currentProduct) {
+            return null;
+        }
+        return this.productService.updateProduct(id, Object.assign(Object.assign({}, currentProduct), productDto));
     }
     async deleteProduct(id) {
         return this.productService.deleteProduct(id);
@@ -1930,29 +1956,29 @@ __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [CreateProductDto]),
-    __metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
+    __metadata("design:paramtypes", [typeof (_b = typeof product_input_1.ProductDto !== "undefined" && product_input_1.ProductDto) === "function" ? _b : Object]),
+    __metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
 ], ProductController.prototype, "createProduct", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+    __metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
 ], ProductController.prototype, "getProducts", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
+    __metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
 ], ProductController.prototype, "getProduct", null);
 __decorate([
-    (0, common_1.Put)(':id'),
+    (0, common_1.Put)('/:id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, typeof (_e = typeof product_entity_1.ProductEntity !== "undefined" && product_entity_1.ProductEntity) === "function" ? _e : Object]),
-    __metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
+    __metadata("design:paramtypes", [Number, typeof (_f = typeof product_input_1.ProductDto !== "undefined" && product_input_1.ProductDto) === "function" ? _f : Object]),
+    __metadata("design:returntype", Promise)
 ], ProductController.prototype, "updateProduct", null);
 __decorate([
     (0, common_1.Delete)(':id'),
@@ -2108,16 +2134,26 @@ let ProductService = class ProductService {
         const result = await this.entityManager.query(query);
         return result;
     }
-    async updateProduct(product) {
+    async updateProduct(id, updateProductDto) {
+        const currentProduct = await this.getProduct(id);
+        if (!currentProduct) {
+            throw new common_1.NotFoundException(`Product with id ${id} not found`);
+        }
+        const { material, materialtType, price } = updateProductDto;
         const query = `
-      UPDATE "Product"
-      SET material = $1, materialtype = $2, price = $3
-      WHERE id = $4
-      RETURNING *
+        UPDATE "Product"
+        SET material = $1, materialtype = $2, price = $3
+        WHERE id = $4
+        RETURNING *
     `;
-        const values = [product.material, product.materialtype, product.price, product.id];
+        const values = [material || currentProduct.material, materialtType || currentProduct.materialtype, price || currentProduct.price, id];
         const result = await this.entityManager.query(query, values);
-        return result[0];
+        if (result.length > 0) {
+            return result[0];
+        }
+        else {
+            throw new common_1.NotFoundException(`Product with id ${id} not found after update`);
+        }
     }
     async deleteProduct(id) {
         const query = `

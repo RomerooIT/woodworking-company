@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { EntityManager, Repository } from 'typeorm';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { ProductEntity } from './product.entity';
+import { ProductDto } from './input/product.input';
 
 
 @Injectable()
@@ -39,17 +40,32 @@ export class ProductService {
     return result;
   }
 
-  async updateProduct(product: ProductEntity): Promise<ProductEntity> {
+  async updateProduct(id: number, updateProductDto: ProductDto): Promise<ProductEntity> {
+    const currentProduct = await this.getProduct(id);
+
+    if (!currentProduct) {
+        throw new NotFoundException(`Product with id ${id} not found`);
+    }
+
+    const { material, materialtType, price } = updateProductDto;
+
     const query = `
-      UPDATE "Product"
-      SET material = $1, materialtype = $2, price = $3
-      WHERE id = $4
-      RETURNING *
+        UPDATE "Product"
+        SET material = $1, materialtype = $2, price = $3
+        WHERE id = $4
+        RETURNING *
     `;
-    const values = [product.material, product.materialtype, product.price, product.id];
+
+    const values = [material || currentProduct.material, materialtType || currentProduct.materialtype, price || currentProduct.price, id];
+
     const result = await this.entityManager.query(query, values);
-    return result[0];
-  }
+
+    if (result.length > 0) {
+        return result[0];
+    } else {
+        throw new NotFoundException(`Product with id ${id} not found after update`);
+    }
+}
 
   async deleteProduct(id: number): Promise<void> {
     const query = `
