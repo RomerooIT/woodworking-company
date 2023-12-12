@@ -934,7 +934,7 @@ __decorate([
     __metadata("design:type", String)
 ], AuthEntity.prototype, "password", void 0);
 AuthEntity = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)({ name: 'Auth' })
 ], AuthEntity);
 exports.AuthEntity = AuthEntity;
 
@@ -1865,22 +1865,104 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a;
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c, _d, _e, _f, _g;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ProductController = void 0;
+exports.ProductController = exports.CreateProductDto = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
-const guards_1 = __webpack_require__(/*! src/auth/guards */ "./src/auth/guards/index.ts");
 const product_service_1 = __webpack_require__(/*! ./product.service */ "./src/product/product.service.ts");
+const product_entity_1 = __webpack_require__(/*! ./product.entity */ "./src/product/product.entity.ts");
+const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
+class CreateProductDto {
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: String, nullable: false, required: true }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateProductDto.prototype, "material", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: String, nullable: false, required: true }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateProductDto.prototype, "materialtType", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: Number, nullable: false, required: true }),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], CreateProductDto.prototype, "price", void 0);
+exports.CreateProductDto = CreateProductDto;
 let ProductController = class ProductController {
     constructor(productService) {
         this.productService = productService;
     }
+    async createProduct(params) {
+        const { material, materialtType, price } = params;
+        console.log(params.materialtType);
+        if (isNaN(price)) {
+            throw new common_1.BadRequestException('Invalid price value');
+        }
+        const product = {
+            material,
+            materialtype: materialtType,
+            price: price
+        };
+        const result = await this.productService.createProduct(product);
+        return result;
+    }
+    async getProducts() {
+        return this.productService.getProducts();
+    }
+    async getProduct(id) {
+        return this.productService.getProduct(id);
+    }
+    async updateProduct(id, product) {
+        product.id = id;
+        return this.productService.updateProduct(product);
+    }
+    async deleteProduct(id) {
+        return this.productService.deleteProduct(id);
+    }
 };
+__decorate([
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [CreateProductDto]),
+    __metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
+], ProductController.prototype, "createProduct", null);
+__decorate([
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+], ProductController.prototype, "getProducts", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
+], ProductController.prototype, "getProduct", null);
+__decorate([
+    (0, common_1.Put)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, typeof (_e = typeof product_entity_1.ProductEntity !== "undefined" && product_entity_1.ProductEntity) === "function" ? _e : Object]),
+    __metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
+], ProductController.prototype, "updateProduct", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+], ProductController.prototype, "deleteProduct", null);
 ProductController = __decorate([
     (0, swagger_1.ApiTags)('Product'),
-    (0, swagger_1.ApiBearerAuth)(),
-    (0, common_1.UseGuards)(guards_1.AuthGuard),
     (0, common_1.Controller)('product'),
     __metadata("design:paramtypes", [typeof (_a = typeof product_service_1.ProductService !== "undefined" && product_service_1.ProductService) === "function" ? _a : Object])
 ], ProductController);
@@ -1924,9 +2006,9 @@ __decorate([
     __metadata("design:type", String)
 ], ProductEntity.prototype, "material", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: false, default: MaterialtTypeEnum.tree }),
+    (0, typeorm_1.Column)({ nullable: false, default: MaterialtTypeEnum.tree, name: 'materialtype' }),
     __metadata("design:type", String)
-], ProductEntity.prototype, "materialtType", void 0);
+], ProductEntity.prototype, "materialtype", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: false }),
     __metadata("design:type", Number)
@@ -1996,10 +2078,54 @@ exports.ProductService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
 const typeorm_2 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
-const product_entity_1 = __webpack_require__(/*! ./product.entity */ "./src/product/product.entity.ts");
-let ProductService = class ProductService extends typeorm_1.Repository {
+let ProductService = class ProductService {
     constructor(entityManager) {
-        super(product_entity_1.ProductEntity, entityManager);
+        this.entityManager = entityManager;
+    }
+    async createProduct(product) {
+        const query = `
+      INSERT INTO "Product" (material, materialtype, price)
+      VALUES ($1, $2, $3)
+      RETURNING *
+    `;
+        const values = [product.material, product.materialtype, product.price];
+        const result = await this.entityManager.query(query, values);
+        return result[0];
+    }
+    async getProduct(id) {
+        const query = `
+      SELECT * FROM "Product"
+      WHERE id = $1
+    `;
+        const values = [id];
+        const result = await this.entityManager.query(query, values);
+        return result[0];
+    }
+    async getProducts() {
+        const query = `
+      SELECT * FROM "Product"
+    `;
+        const result = await this.entityManager.query(query);
+        return result;
+    }
+    async updateProduct(product) {
+        const query = `
+      UPDATE "Product"
+      SET material = $1, materialtype = $2, price = $3
+      WHERE id = $4
+      RETURNING *
+    `;
+        const values = [product.material, product.materialtype, product.price, product.id];
+        const result = await this.entityManager.query(query, values);
+        return result[0];
+    }
+    async deleteProduct(id) {
+        const query = `
+      DELETE FROM "Product"
+      WHERE id = $1
+    `;
+        const values = [id];
+        await this.entityManager.query(query, values);
     }
 };
 ProductService = __decorate([
@@ -2762,6 +2888,10 @@ __decorate([
     __metadata("design:type", String)
 ], UserEntity.prototype, "name", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], UserEntity.prototype, "surname", void 0);
+__decorate([
     (0, typeorm_1.Column)({ nullable: false, default: core_1.Roles.User }),
     __metadata("design:type", String)
 ], UserEntity.prototype, "role", void 0);
@@ -2774,7 +2904,7 @@ __decorate([
     __metadata("design:type", typeof (_b = typeof basket_entity_1.BasketEntity !== "undefined" && basket_entity_1.BasketEntity) === "function" ? _b : Object)
 ], UserEntity.prototype, "basket", void 0);
 UserEntity = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)({ name: 'User' })
 ], UserEntity);
 exports.UserEntity = UserEntity;
 
@@ -3429,9 +3559,9 @@ async function bootstrap() {
         transform: true,
         skipUndefinedProperties: false,
         skipMissingProperties: false,
+        forbidUnknownValues: false,
     }));
     const builder = new swagger_1.DocumentBuilder()
-        .addBearerAuth()
         .setTitle('TreeShop')
         .setDescription('Some description')
         .setVersion('1.0')

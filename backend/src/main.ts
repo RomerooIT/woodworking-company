@@ -32,12 +32,13 @@ async function bootstrap() {
       transform: true,
       skipUndefinedProperties: false,
       skipMissingProperties: false,
+      forbidUnknownValues: false,
     }),
   );
 
   // swagger
   const builder = new DocumentBuilder()
-    .addBearerAuth()
+    // .addBearerAuth()
     .setTitle('TreeShop')
     .setDescription('Some description')
     .setVersion('1.0')

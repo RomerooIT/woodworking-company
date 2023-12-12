@@ -10,7 +10,7 @@ import { UserEntity } from '../../users/entity/user.entity';
 
 import { IAuth } from './auth.model';
 
-@Entity()
+@Entity({name: 'Auth'})
 export class AuthEntity implements IAuth {
   @PrimaryGeneratedColumn()
   id: number;

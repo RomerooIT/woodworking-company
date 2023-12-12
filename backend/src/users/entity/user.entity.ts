@@ -3,7 +3,7 @@ import { BasketEntity } from 'src/basket/basket.entity';
 import { SupportEntity } from 'src/support/support.entity';
 import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity({name: 'User'})
 export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -13,6 +13,9 @@ export class UserEntity {
 
   @Column({ nullable: false })
   name: string;
+
+  @Column({nullable: true})
+  surname: string;
 
   @Column({nullable: false, default: Roles.User})
   role: string

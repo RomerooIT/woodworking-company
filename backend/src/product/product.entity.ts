@@ -8,13 +8,13 @@ enum MaterialtTypeEnum {
 @Entity({name: 'Product'})
 export class ProductEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column({nullable: false})
   material: string;
 
-  @Column({nullable: false, default: MaterialtTypeEnum.tree})
-  materialtType: string 
+  @Column({nullable: false, default: MaterialtTypeEnum.tree, name: 'materialtype'})
+  materialtype: string 
 
   @Column({nullable: false})
   price: number
