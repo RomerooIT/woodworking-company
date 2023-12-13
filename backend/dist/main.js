@@ -294,11 +294,9 @@ const ioredis_1 = __webpack_require__(/*! @nestjs-modules/ioredis */ "@nestjs-mo
 const refreshTokens_entity_1 = __webpack_require__(/*! ./auth/entity/refreshTokens.entity */ "./src/auth/entity/refreshTokens.entity.ts");
 const session_entity_1 = __webpack_require__(/*! ./sessions/session.entity */ "./src/sessions/session.entity.ts");
 const session_module_1 = __webpack_require__(/*! ./sessions/session.module */ "./src/sessions/session.module.ts");
-const basket_entity_1 = __webpack_require__(/*! ./basket/basket.entity */ "./src/basket/basket.entity.ts");
 const product_entity_1 = __webpack_require__(/*! ./product/product.entity */ "./src/product/product.entity.ts");
 const support_entity_1 = __webpack_require__(/*! ./support/support.entity */ "./src/support/support.entity.ts");
 const worker_entity_1 = __webpack_require__(/*! ./worker/worker.entity */ "./src/worker/worker.entity.ts");
-const basket_module_1 = __webpack_require__(/*! ./basket/basket.module */ "./src/basket/basket.module.ts");
 const request_entity_1 = __webpack_require__(/*! ./request/request.entity */ "./src/request/request.entity.ts");
 const request_module_1 = __webpack_require__(/*! ./request/request.module */ "./src/request/request.module.ts");
 const product_module_1 = __webpack_require__(/*! ./product/product.module */ "./src/product/product.module.ts");
@@ -330,7 +328,6 @@ AppModule = __decorate([
                             session_entity_1.SessionEntity,
                             user_entity_1.UserEntity,
                             auth_entity_1.AuthEntity,
-                            basket_entity_1.BasketEntity,
                             request_entity_1.RequestEntity,
                             product_entity_1.ProductEntity,
                             support_entity_1.SupportEntity,
@@ -352,7 +349,6 @@ AppModule = __decorate([
             auth_1.AuthModule,
             jwt_1.JwtModule,
             session_module_1.SessionModule,
-            basket_module_1.BasketModule,
             request_module_1.RequestModule,
             product_module_1.ProductModule,
             support_module_1.SupportModule,
@@ -491,6 +487,7 @@ let AuthController = class AuthController {
         const { sessionId, refreshToken } = data;
         this.setSessionId(response, sessionId);
         this.setRefreshToken(response, refreshToken);
+        return { refreshToken: refreshToken };
     }
     async signOut(response, request) {
         const { id, sessionId } = request.refresh;
@@ -507,6 +504,7 @@ let AuthController = class AuthController {
         });
         this.setSessionId(response, data.sessionId);
         this.setRefreshToken(response, data.refreshToken);
+        return data.refreshToken;
     }
     setRefreshToken(response, refreshToken) {
         response.cookie(core_1.REFRESH_TOKEN_COOKIE_NAME_TOKEN, refreshToken);
@@ -1696,159 +1694,6 @@ exports.RefreshTokensRepository = RefreshTokensRepository;
 
 /***/ }),
 
-/***/ "./src/basket/basket.controller.ts":
-/*!*****************************************!*\
-  !*** ./src/basket/basket.controller.ts ***!
-  \*****************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var _a;
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BasketController = void 0;
-const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
-const guards_1 = __webpack_require__(/*! src/auth/guards */ "./src/auth/guards/index.ts");
-const basket_service_1 = __webpack_require__(/*! ./basket.service */ "./src/basket/basket.service.ts");
-let BasketController = class BasketController {
-    constructor(basketService) {
-        this.basketService = basketService;
-    }
-};
-BasketController = __decorate([
-    (0, swagger_1.ApiTags)('Basket'),
-    (0, swagger_1.ApiBearerAuth)(),
-    (0, common_1.UseGuards)(guards_1.AuthGuard),
-    (0, common_1.Controller)('basket'),
-    __metadata("design:paramtypes", [typeof (_a = typeof basket_service_1.BasketService !== "undefined" && basket_service_1.BasketService) === "function" ? _a : Object])
-], BasketController);
-exports.BasketController = BasketController;
-
-
-/***/ }),
-
-/***/ "./src/basket/basket.entity.ts":
-/*!*************************************!*\
-  !*** ./src/basket/basket.entity.ts ***!
-  \*************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var _a;
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BasketEntity = void 0;
-const request_entity_1 = __webpack_require__(/*! src/request/request.entity */ "./src/request/request.entity.ts");
-const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
-let BasketEntity = class BasketEntity {
-};
-__decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], BasketEntity.prototype, "id", void 0);
-__decorate([
-    (0, typeorm_1.OneToMany)(() => request_entity_1.RequestEntity, (entity) => entity.basket),
-    (0, typeorm_1.JoinColumn)(),
-    __metadata("design:type", typeof (_a = typeof request_entity_1.RequestEntity !== "undefined" && request_entity_1.RequestEntity) === "function" ? _a : Object)
-], BasketEntity.prototype, "request", void 0);
-BasketEntity = __decorate([
-    (0, typeorm_1.Entity)({ name: 'Basket' })
-], BasketEntity);
-exports.BasketEntity = BasketEntity;
-
-
-/***/ }),
-
-/***/ "./src/basket/basket.module.ts":
-/*!*************************************!*\
-  !*** ./src/basket/basket.module.ts ***!
-  \*************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BasketModule = void 0;
-const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const basket_service_1 = __webpack_require__(/*! ./basket.service */ "./src/basket/basket.service.ts");
-const basket_controller_1 = __webpack_require__(/*! ./basket.controller */ "./src/basket/basket.controller.ts");
-let BasketModule = class BasketModule {
-};
-BasketModule = __decorate([
-    (0, common_1.Module)({
-        controllers: [basket_controller_1.BasketController],
-        exports: [basket_service_1.BasketService],
-        providers: [basket_service_1.BasketService]
-    })
-], BasketModule);
-exports.BasketModule = BasketModule;
-
-
-/***/ }),
-
-/***/ "./src/basket/basket.service.ts":
-/*!**************************************!*\
-  !*** ./src/basket/basket.service.ts ***!
-  \**************************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-var _a;
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BasketService = void 0;
-const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
-const basket_entity_1 = __webpack_require__(/*! ./basket.entity */ "./src/basket/basket.entity.ts");
-const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
-const typeorm_2 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
-let BasketService = class BasketService extends typeorm_1.Repository {
-    constructor(entityManager) {
-        super(basket_entity_1.BasketEntity, entityManager);
-    }
-};
-BasketService = __decorate([
-    (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_2.InjectEntityManager)()),
-    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_1.EntityManager !== "undefined" && typeorm_1.EntityManager) === "function" ? _a : Object])
-], BasketService);
-exports.BasketService = BasketService;
-
-
-/***/ }),
-
 /***/ "./src/product/input/product.input.ts":
 /*!********************************************!*\
   !*** ./src/product/input/product.input.ts ***!
@@ -2230,10 +2075,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a, _b, _c, _d;
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RequestEntity = void 0;
-const basket_entity_1 = __webpack_require__(/*! src/basket/basket.entity */ "./src/basket/basket.entity.ts");
 const product_entity_1 = __webpack_require__(/*! src/product/product.entity */ "./src/product/product.entity.ts");
 const user_entity_1 = __webpack_require__(/*! src/users/entity/user.entity */ "./src/users/entity/user.entity.ts");
 const worker_entity_1 = __webpack_require__(/*! src/worker/worker.entity */ "./src/worker/worker.entity.ts");
@@ -2255,11 +2099,6 @@ __decorate([
     __metadata("design:type", typeof (_b = typeof product_entity_1.ProductEntity !== "undefined" && product_entity_1.ProductEntity) === "function" ? _b : Object)
 ], RequestEntity.prototype, "product", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => basket_entity_1.BasketEntity, (entity) => entity.request),
-    (0, typeorm_1.JoinColumn)(),
-    __metadata("design:type", typeof (_c = typeof basket_entity_1.BasketEntity !== "undefined" && basket_entity_1.BasketEntity) === "function" ? _c : Object)
-], RequestEntity.prototype, "basket", void 0);
-__decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], RequestEntity.prototype, "customerAddress", void 0);
@@ -2272,9 +2111,9 @@ __decorate([
     __metadata("design:type", String)
 ], RequestEntity.prototype, "requirements", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => worker_entity_1.WorkerEntity, { nullable: true }),
+    (0, typeorm_1.ManyToOne)(() => worker_entity_1.WorkerEntity, { nullable: true }),
     (0, typeorm_1.JoinColumn)(),
-    __metadata("design:type", typeof (_d = typeof worker_entity_1.WorkerEntity !== "undefined" && worker_entity_1.WorkerEntity) === "function" ? _d : Object)
+    __metadata("design:type", typeof (_c = typeof worker_entity_1.WorkerEntity !== "undefined" && worker_entity_1.WorkerEntity) === "function" ? _c : Object)
 ], RequestEntity.prototype, "worker", void 0);
 RequestEntity = __decorate([
     (0, typeorm_1.Entity)({ name: 'Request' })
@@ -2902,11 +2741,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a, _b;
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserEntity = void 0;
 const core_1 = __webpack_require__(/*! src/auth/core */ "./src/auth/core/index.ts");
-const basket_entity_1 = __webpack_require__(/*! src/basket/basket.entity */ "./src/basket/basket.entity.ts");
 const support_entity_1 = __webpack_require__(/*! src/support/support.entity */ "./src/support/support.entity.ts");
 const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
 let UserEntity = class UserEntity {
@@ -2935,10 +2773,6 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => support_entity_1.SupportEntity, (entity) => entity.client),
     __metadata("design:type", typeof (_a = typeof support_entity_1.SupportEntity !== "undefined" && support_entity_1.SupportEntity) === "function" ? _a : Object)
 ], UserEntity.prototype, "supportMessage", void 0);
-__decorate([
-    (0, typeorm_1.OneToOne)(() => basket_entity_1.BasketEntity),
-    __metadata("design:type", typeof (_b = typeof basket_entity_1.BasketEntity !== "undefined" && basket_entity_1.BasketEntity) === "function" ? _b : Object)
-], UserEntity.prototype, "basket", void 0);
 UserEntity = __decorate([
     (0, typeorm_1.Entity)({ name: 'User' })
 ], UserEntity);
@@ -3141,6 +2975,63 @@ exports.UsersModule = UsersModule;
 
 /***/ }),
 
+/***/ "./src/worker/input/worker.input.ts":
+/*!******************************************!*\
+  !*** ./src/worker/input/worker.input.ts ***!
+  \******************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.WorkerDto = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
+class WorkerDto {
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: String, nullable: false, required: true }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], WorkerDto.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: String, nullable: false, required: true }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], WorkerDto.prototype, "surname", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: Number, nullable: false, required: true }),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], WorkerDto.prototype, "age", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: Number, nullable: false, required: true }),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], WorkerDto.prototype, "salary", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: String, nullable: false, required: true }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], WorkerDto.prototype, "category", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: String, nullable: false, required: true }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], WorkerDto.prototype, "currentState", void 0);
+exports.WorkerDto = WorkerDto;
+
+
+/***/ }),
+
 /***/ "./src/worker/worker.controller.ts":
 /*!*****************************************!*\
   !*** ./src/worker/worker.controller.ts ***!
@@ -3157,18 +3048,51 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a;
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c, _d;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkerController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
 const guards_1 = __webpack_require__(/*! src/auth/guards */ "./src/auth/guards/index.ts");
 const worker_service_1 = __webpack_require__(/*! ./worker.service */ "./src/worker/worker.service.ts");
+const worker_input_1 = __webpack_require__(/*! ./input/worker.input */ "./src/worker/input/worker.input.ts");
 let WorkerController = class WorkerController {
     constructor(workerService) {
         this.workerService = workerService;
     }
+    async createProduct(params) {
+        const { name, surname, age, salary, category, currentState } = params;
+        const worker = {
+            name,
+            surname,
+            age,
+            salary,
+            category,
+            currentState
+        };
+        const result = await this.workerService.createWorker(worker);
+        return result;
+    }
+    async getProducts() {
+        return this.workerService.getWorkers();
+    }
 };
+__decorate([
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_b = typeof worker_input_1.WorkerDto !== "undefined" && worker_input_1.WorkerDto) === "function" ? _b : Object]),
+    __metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+], WorkerController.prototype, "createProduct", null);
+__decorate([
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
+], WorkerController.prototype, "getProducts", null);
 WorkerController = __decorate([
     (0, swagger_1.ApiTags)('Worker'),
     (0, swagger_1.ApiBearerAuth)(),
@@ -3233,10 +3157,10 @@ __decorate([
     __metadata("design:type", String)
 ], WorkerEntity.prototype, "currentState", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => request_entity_1.RequestEntity, { nullable: true }),
+    (0, typeorm_1.OneToMany)(() => request_entity_1.RequestEntity, (entity) => entity.worker),
     (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", typeof (_a = typeof request_entity_1.RequestEntity !== "undefined" && request_entity_1.RequestEntity) === "function" ? _a : Object)
-], WorkerEntity.prototype, "worker", void 0);
+], WorkerEntity.prototype, "request", void 0);
 WorkerEntity = __decorate([
     (0, typeorm_1.Entity)({ name: 'Worker' })
 ], WorkerEntity);
@@ -3302,10 +3226,26 @@ exports.WorkerService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
 const typeorm_2 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
-const worker_entity_1 = __webpack_require__(/*! ./worker.entity */ "./src/worker/worker.entity.ts");
-let WorkerService = class WorkerService extends typeorm_1.Repository {
+let WorkerService = class WorkerService {
     constructor(entityManager) {
-        super(worker_entity_1.WorkerEntity, entityManager);
+        this.entityManager = entityManager;
+    }
+    async createWorker(worker) {
+        const query = `
+      INSERT INTO "Worker" (name, surname, age, salary, category, currentState)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING *
+    `;
+        const values = [worker.name, worker.surname, worker.age, worker.salary, worker.category, worker.currentState];
+        const result = await this.entityManager.query(query, values);
+        return result[0];
+    }
+    async getWorkers() {
+        const query = `
+      SELECT * FROM "Worker"
+    `;
+        const result = await this.entityManager.query(query);
+        return result;
     }
 };
 WorkerService = __decorate([

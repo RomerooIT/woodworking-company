@@ -48,6 +48,7 @@ export class AuthController {
 
     this.setSessionId(response, sessionId);
     this.setRefreshToken(response, refreshToken);
+    return {refreshToken: refreshToken}
   }
 
   @Post('/sign-out')
@@ -77,9 +78,10 @@ export class AuthController {
     const { data } = await this.authService.refresh({
       refreshToken,
     });
-
+ 
     this.setSessionId(response, data.sessionId);
     this.setRefreshToken(response, data.refreshToken);
+    return data.refreshToken
   }
 
   private setRefreshToken(response: Response, refreshToken: string) {

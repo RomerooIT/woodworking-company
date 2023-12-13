@@ -23,6 +23,6 @@ export class UserEntity {
   @OneToMany(() => SupportEntity,  (entity) => entity.client)
   supportMessage: SupportEntity
 
-  @OneToOne(() => BasketEntity)
-  basket: BasketEntity
+  // @OneToOne(() => BasketEntity)
+  // basket: BasketEntity
 }

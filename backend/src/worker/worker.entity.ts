@@ -1,10 +1,10 @@
 import { RequestEntity } from 'src/request/request.entity';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({name: 'Worker'})
 export class WorkerEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column({nullable: false})
   name: string
@@ -24,7 +24,7 @@ export class WorkerEntity {
   @Column({nullable: true})
   currentState: string
 
-  @OneToOne(() => RequestEntity, { nullable: true })
+  @OneToMany(() => RequestEntity, (entity) => entity.worker)
   @JoinColumn()
-  worker: RequestEntity;
+  request?: RequestEntity;
 }

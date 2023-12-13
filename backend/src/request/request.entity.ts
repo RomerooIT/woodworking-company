@@ -17,9 +17,9 @@ export class RequestEntity {
   @JoinColumn()
   product: ProductEntity
 
-  @ManyToOne(() => BasketEntity, (entity) => entity.request)
-  @JoinColumn()
-  basket: BasketEntity
+  // @ManyToOne(() => BasketEntity, (entity) => entity.request)
+  // @JoinColumn()
+  // basket: BasketEntity
 
   @Column({nullable: true})
   customerAddress: string
@@ -30,7 +30,7 @@ export class RequestEntity {
   @Column({nullable: true})
   requirements: string
 
-  @OneToOne(() => WorkerEntity, {nullable: true})
+  @ManyToOne(() => WorkerEntity, {nullable: true})
   @JoinColumn()
   worker: WorkerEntity
 }
