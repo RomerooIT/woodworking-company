@@ -3056,7 +3056,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkerController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
-const guards_1 = __webpack_require__(/*! src/auth/guards */ "./src/auth/guards/index.ts");
 const worker_service_1 = __webpack_require__(/*! ./worker.service */ "./src/worker/worker.service.ts");
 const worker_input_1 = __webpack_require__(/*! ./input/worker.input */ "./src/worker/input/worker.input.ts");
 let WorkerController = class WorkerController {
@@ -3064,14 +3063,14 @@ let WorkerController = class WorkerController {
         this.workerService = workerService;
     }
     async createProduct(params) {
-        const { name, surname, age, salary, category, currentState } = params;
+        const { name, surname, age, salary, category, currentstate } = params;
         const worker = {
             name,
             surname,
             age,
             salary,
             category,
-            currentState
+            currentstate
         };
         const result = await this.workerService.createWorker(worker);
         return result;
@@ -3095,8 +3094,6 @@ __decorate([
 ], WorkerController.prototype, "getProducts", null);
 WorkerController = __decorate([
     (0, swagger_1.ApiTags)('Worker'),
-    (0, swagger_1.ApiBearerAuth)(),
-    (0, common_1.UseGuards)(guards_1.AuthGuard),
     (0, common_1.Controller)('worker'),
     __metadata("design:paramtypes", [typeof (_a = typeof worker_service_1.WorkerService !== "undefined" && worker_service_1.WorkerService) === "function" ? _a : Object])
 ], WorkerController);
@@ -3155,7 +3152,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
-], WorkerEntity.prototype, "currentState", void 0);
+], WorkerEntity.prototype, "currentstate", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => request_entity_1.RequestEntity, (entity) => entity.worker),
     (0, typeorm_1.JoinColumn)(),

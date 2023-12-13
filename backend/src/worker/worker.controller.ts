@@ -6,8 +6,8 @@ import { WorkerEntity } from './worker.entity';
 import { WorkerDto } from './input/worker.input';
 
 @ApiTags('Worker')
-@ApiBearerAuth()
-@UseGuards(AuthGuard)
+// @ApiBearerAuth()
+// @UseGuards(AuthGuard)
 @Controller('worker')
 export class WorkerController {
   constructor(private workerService: WorkerService) {} 
@@ -17,7 +17,7 @@ export class WorkerController {
   async createProduct(
     @Body() params: WorkerDto,
   ): Promise<WorkerEntity> {
-    const {name, surname, age, salary, category, currentState} = params
+    const {name, surname, age, salary, category, currentstate} = params
   
     const worker: WorkerEntity = {
       name,
@@ -25,7 +25,7 @@ export class WorkerController {
       age, 
       salary, 
       category, 
-      currentState
+      currentstate
     };
   
    const result = await this.workerService.createWorker(worker);

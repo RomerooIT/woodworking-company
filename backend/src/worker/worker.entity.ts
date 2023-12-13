@@ -22,7 +22,7 @@ export class WorkerEntity {
   category: string
 
   @Column({nullable: true})
-  currentState: string
+  currentstate: string
 
   @OneToMany(() => RequestEntity, (entity) => entity.worker)
   @JoinColumn()
