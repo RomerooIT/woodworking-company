@@ -16,8 +16,6 @@ import ModalFormFire from './ModalFormFire';
 import ModalFormEdit from './ModalFormEdit';
 import ModalFormAdd from './ModalFormAdd';
 
-
-
 const WorkersTable = () => {
     const [selectedRow, setSelectedRow] = useState(null);
     const [isModalFireActive, setModalFireActive] = useState(false);
@@ -94,7 +92,7 @@ const WorkersTable = () => {
                             </Button>
                         </MDBCol>
                         <MDBCol className="mb-2" size="4">
-                            <Button variant="success" onClick={handleDismissAdd} className="w-100">
+                            <Button variant="success" disabled={!selectedRow} onClick={handleDismissAdd} className="w-100">
                                 Добавить
                             </Button>
                         </MDBCol>
@@ -108,4 +106,4 @@ const WorkersTable = () => {
     );
 };
 
-export default WorkersTable
+export default WorkersTable;
