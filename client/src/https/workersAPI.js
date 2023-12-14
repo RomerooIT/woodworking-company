@@ -1,12 +1,12 @@
 import {$authHost, $host} from "./index";
 
-// export const ShowWorkers = async (id, name, surname, age, salary, category, currentState) => 
-// {
-// const {data} = await $host.get('api/worker', {params : {
-//     id, name, surname, age, salary, category, currentState
-// }})
-// return data
-// }
+export const ShowWorkers = async (id, name, surname, age, salary, category, currentState) => 
+{
+const {data} = await $host.get('api/worker', {params : {
+    id, name, surname, age, salary, category, currentState
+}})
+return data
+}
 
 export const ShowUser = async (id, email, name,
      surname, role) => 
