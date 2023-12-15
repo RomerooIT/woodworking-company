@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     MDBCard,
     MDBCardBody,
@@ -10,7 +10,6 @@ import {
     MDBRow,
     MDBCol
 } from 'mdb-react-ui-kit';
-import workersObject from '../utils/workers';
 import Button from 'react-bootstrap/Button';
 import ModalFormFire from './ModalFormFire';
 import ModalFormEdit from './ModalFormEdit';
@@ -21,8 +20,7 @@ const WorkersTable = () => {
     const [isModalFireActive, setModalFireActive] = useState(false);
     const [isModalEditActive, setModalEditActive] = useState(false);
     const [isModalAddActive, setModalAddActive] = useState(false);
-
-    const [workers, setWorkers] = useState(workersObject);
+    const [apiData, setApiData] = useState([]);
 
     const handleRowClick = (id) => {
         setSelectedRow(id === selectedRow ? null : id);
@@ -42,12 +40,19 @@ const WorkersTable = () => {
 
     const handleFire = () => {
         if (selectedRow !== null) {
-            const updatedWorkers = workers.filter(worker => worker.id !== selectedRow);
-            setWorkers(updatedWorkers);
+            const updatedWorkers = apiData.filter(worker => worker.id !== selectedRow);
+            setApiData(updatedWorkers);
             setSelectedRow(null);
             setModalFireActive(false);
         }
     };
+
+    useEffect(() => {
+        fetch('https://localhost:7891/api/worker')
+            .then(response => response.json())
+            .then(data => setApiData(data))
+            .catch(error => console.error(error));
+    }, []);
 
     return (
         <section style={{ backgroundColor: '#eee' }}>
@@ -64,15 +69,15 @@ const WorkersTable = () => {
                                 </tr>
                             </MDBTableHead>
                             <MDBTableBody>
-                                {workers.map(worker =>
+                                {apiData.map(worker =>
                                     <tr key={worker.id} onClick={() => handleRowClick(worker.id)} style={{ background: selectedRow === worker.id ? '#b8daff' : '' }}>
                                         <td>{worker.id}</td>
                                         <td>{worker.name}</td>
                                         <td>{worker.surname}</td>
                                         <td>{worker.age}</td>
                                         <td>{worker.salary}</td>
-                                        <td>{worker.profession}</td>
-                                        <td>{worker.status}</td>
+                                        <td>{worker.category}</td>
+                                        <td>{worker.currentstate}</td>
                                     </tr>
                                 )}
                             </MDBTableBody>
@@ -82,24 +87,24 @@ const WorkersTable = () => {
                 <div className="mt-3">
                     <MDBRow>
                         <MDBCol className="mb-2" size="4">
-                            <Button variant="danger" disabled={!selectedRow} onClick={handleDismissFire} className="w-100">
-                                Уволить
-                            </Button>
-                        </MDBCol>
-                        <MDBCol className="mb-2" size="4">
-                            <Button variant="primary" disabled={!selectedRow} onClick={handleDismissEdit} className="w-100">
+                        <Button variant="primary" disabled={!selectedRow} onClick={handleDismissEdit} className="w-100">
                                 Редактировать
                             </Button>
                         </MDBCol>
                         <MDBCol className="mb-2" size="4">
-                            <Button variant="success" disabled={!selectedRow} onClick={handleDismissAdd} className="w-100">
+                            <Button variant="success" onClick={handleDismissAdd} className="w-100">
                                 Добавить
+                            </Button>
+                        </MDBCol>
+                        <MDBCol className="mb-2" size="4">
+                            <Button variant="danger" disabled={!selectedRow} onClick={handleDismissFire} className="w-100">
+                                Уволить
                             </Button>
                         </MDBCol>
                     </MDBRow>
                 </div>
                 <ModalFormFire active={isModalFireActive} setActive={setModalFireActive} info={[selectedRow]} handleFire={handleFire} />
-                <ModalFormEdit active={isModalEditActive} setActive={setModalEditActive} info={[selectedRow]}/>
+                <ModalFormEdit active={isModalEditActive} setActive={setModalEditActive} info={[selectedRow]} />
                 <ModalFormAdd active={isModalAddActive} setActive={setModalAddActive} info={[selectedRow]} />
             </MDBContainer>
         </section>

@@ -1,18 +1,43 @@
-import {$authHost, $host} from "./index";
+import axios from 'axios'
 
-export const ShowWorkers = async (id, name, surname, age, salary, category, currentState) => 
+export async function AddWorker() 
 {
-const {data} = await $host.get('api/worker', {params : {
-    id, name, surname, age, salary, category, currentState
-}})
-return data
+  const url = `https://localhost:7891/api/worker`;
+
+  try {
+    const response = await axios({
+      method: "POST",
+      url: url,
+    });
+
+    return {
+      response: response,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      error: "An error occurred while fetching data from the WoodGuru backend API.",
+    };
+  }
 }
 
-export const ShowUser = async (id, email, name,
-     surname, role) => 
-{
-const {data} = await $host.get('api/users/1', {params : {
-    id, email, name, surname, role
-}})
-return data
-}
+// export async function DeleteUser() 
+// {
+//   const url = `https://localhost:7891/api/worker`;
+
+//   try {
+//     const response = await axios({
+//       method: "DELETE",
+//       url: url,
+//     });
+
+//     return {
+//       response: response,
+//     };
+//   } catch (error) {
+//     console.error(error);
+//     return {
+//       error: "An error occurred while fetching data from the WoodGuru backend API.",
+//     };
+//   }
+// }
