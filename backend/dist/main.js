@@ -2019,6 +2019,108 @@ exports.ProductService = ProductService;
 
 /***/ }),
 
+/***/ "./src/request/inputs/create-request.input.ts":
+/*!****************************************************!*\
+  !*** ./src/request/inputs/create-request.input.ts ***!
+  \****************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CreateRequestDto = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
+class CreateRequestDto {
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: Number, nullable: false, required: false }),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], CreateRequestDto.prototype, "clientId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: Number, nullable: false, required: false }),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], CreateRequestDto.prototype, "productId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: String, nullable: false, required: false }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateRequestDto.prototype, "customerAddress", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: Number, nullable: false, required: false, default: 1 }),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], CreateRequestDto.prototype, "amount", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: String, nullable: false, required: false }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateRequestDto.prototype, "requirements", void 0);
+exports.CreateRequestDto = CreateRequestDto;
+
+
+/***/ }),
+
+/***/ "./src/request/inputs/update-request.input.ts":
+/*!****************************************************!*\
+  !*** ./src/request/inputs/update-request.input.ts ***!
+  \****************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UpdateUserRequestDto = exports.UpdateAdminRequestDto = void 0;
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
+class UpdateAdminRequestDto {
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: Number, nullable: false, required: false }),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], UpdateAdminRequestDto.prototype, "workerId", void 0);
+exports.UpdateAdminRequestDto = UpdateAdminRequestDto;
+class UpdateUserRequestDto {
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: String, nullable: false, required: false }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateUserRequestDto.prototype, "customerAddress", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: Number, nullable: false, required: false, default: 1 }),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], UpdateUserRequestDto.prototype, "amount", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: String, nullable: false, required: false }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateUserRequestDto.prototype, "requirements", void 0);
+exports.UpdateUserRequestDto = UpdateUserRequestDto;
+
+
+/***/ }),
+
 /***/ "./src/request/request.controller.ts":
 /*!*******************************************!*\
   !*** ./src/request/request.controller.ts ***!
@@ -2035,24 +2137,110 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a;
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RequestController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
-const guards_1 = __webpack_require__(/*! src/auth/guards */ "./src/auth/guards/index.ts");
 const request_service_1 = __webpack_require__(/*! ./request.service */ "./src/request/request.service.ts");
+const create_request_input_1 = __webpack_require__(/*! ./inputs/create-request.input */ "./src/request/inputs/create-request.input.ts");
+const users_1 = __webpack_require__(/*! src/users */ "./src/users/index.ts");
+const product_service_1 = __webpack_require__(/*! src/product/product.service */ "./src/product/product.service.ts");
+const update_request_input_1 = __webpack_require__(/*! ./inputs/update-request.input */ "./src/request/inputs/update-request.input.ts");
 let RequestController = class RequestController {
-    constructor(requestService) {
+    constructor(requestService, userService, productService) {
         this.requestService = requestService;
+        this.userService = userService;
+        this.productService = productService;
+    }
+    async createRequest(params) {
+        const { amount, clientId, customerAddress, productId, requirements } = params;
+        const user = await this.userService.getById({ userId: clientId });
+        const product = await this.productService.getProduct(productId);
+        const request = {
+            amount,
+            client: user.data,
+            customerAddress,
+            product,
+            requirements,
+        };
+        const result = await this.requestService.createRequest(request);
+        return result;
+    }
+    async getRequests(clientId) {
+        return this.requestService.getAllUserRequests(clientId);
+    }
+    async getAllRequests() {
+        return this.requestService.getRequests();
+    }
+    async updateRequest(id, updateRequestDto) {
+        const currentRequest = await this.requestService.getRequest(id);
+        if (!currentRequest) {
+            return null;
+        }
+        return this.requestService.updateUserRequest(id, Object.assign(Object.assign({}, currentRequest), updateRequestDto));
+    }
+    async updateUserRequest(id, updateRequestDto) {
+        const currentRequest = await this.requestService.getRequest(id);
+        if (!currentRequest) {
+            return null;
+        }
+        return this.requestService.updateAdminRequest(id, Object.assign(Object.assign({}, currentRequest), updateRequestDto));
+    }
+    async deleteRequest(id) {
+        return this.requestService.deleteRequest(id);
     }
 };
+__decorate([
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_d = typeof create_request_input_1.CreateRequestDto !== "undefined" && create_request_input_1.CreateRequestDto) === "function" ? _d : Object]),
+    __metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+], RequestController.prototype, "createRequest", null);
+__decorate([
+    (0, common_1.Get)('/getUserRequests'),
+    __param(0, (0, common_1.Param)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
+], RequestController.prototype, "getRequests", null);
+__decorate([
+    (0, common_1.Get)('/getAllRequests'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+], RequestController.prototype, "getAllRequests", null);
+__decorate([
+    (0, common_1.Put)('/putForUsers'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, typeof (_h = typeof update_request_input_1.UpdateUserRequestDto !== "undefined" && update_request_input_1.UpdateUserRequestDto) === "function" ? _h : Object]),
+    __metadata("design:returntype", Promise)
+], RequestController.prototype, "updateRequest", null);
+__decorate([
+    (0, common_1.Put)('/putForAdmins'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, typeof (_j = typeof update_request_input_1.UpdateAdminRequestDto !== "undefined" && update_request_input_1.UpdateAdminRequestDto) === "function" ? _j : Object]),
+    __metadata("design:returntype", Promise)
+], RequestController.prototype, "updateUserRequest", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", typeof (_k = typeof Promise !== "undefined" && Promise) === "function" ? _k : Object)
+], RequestController.prototype, "deleteRequest", null);
 RequestController = __decorate([
     (0, swagger_1.ApiTags)('Request'),
-    (0, swagger_1.ApiBearerAuth)(),
-    (0, common_1.UseGuards)(guards_1.AuthGuard),
     (0, common_1.Controller)('request'),
-    __metadata("design:paramtypes", [typeof (_a = typeof request_service_1.RequestService !== "undefined" && request_service_1.RequestService) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof request_service_1.RequestService !== "undefined" && request_service_1.RequestService) === "function" ? _a : Object, typeof (_b = typeof users_1.UsersService !== "undefined" && users_1.UsersService) === "function" ? _b : Object, typeof (_c = typeof product_service_1.ProductService !== "undefined" && product_service_1.ProductService) === "function" ? _c : Object])
 ], RequestController);
 exports.RequestController = RequestController;
 
@@ -2141,10 +2329,13 @@ exports.RequestModule = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const request_controller_1 = __webpack_require__(/*! ./request.controller */ "./src/request/request.controller.ts");
 const request_service_1 = __webpack_require__(/*! ./request.service */ "./src/request/request.service.ts");
+const users_1 = __webpack_require__(/*! src/users */ "./src/users/index.ts");
+const product_module_1 = __webpack_require__(/*! src/product/product.module */ "./src/product/product.module.ts");
 let RequestModule = class RequestModule {
 };
 RequestModule = __decorate([
     (0, common_1.Module)({
+        imports: [users_1.UsersModule, product_module_1.ProductModule],
         controllers: [request_controller_1.RequestController],
         exports: [request_service_1.RequestService],
         providers: [request_service_1.RequestService]
@@ -2180,10 +2371,99 @@ exports.RequestService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
 const typeorm_2 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
-const request_entity_1 = __webpack_require__(/*! ./request.entity */ "./src/request/request.entity.ts");
-let RequestService = class RequestService extends typeorm_1.Repository {
+let RequestService = class RequestService {
     constructor(entityManager) {
-        super(request_entity_1.RequestEntity, entityManager);
+        this.entityManager = entityManager;
+    }
+    async createRequest(request) {
+        try {
+            const query = `
+      INSERT INTO "Request" (client, product, customerAddress, amount, requirements)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING *
+    `;
+            const values = [1, request.product, request.customerAddress, request.amount, request.requirements];
+            const result = await this.entityManager.query(query, values);
+            return result[0];
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }
+    async getRequest(id) {
+        const query = `
+      SELECT * FROM "Request"
+      WHERE id = $1
+    `;
+        const values = [id];
+        const result = await this.entityManager.query(query, values);
+        return result[0];
+    }
+    async getRequests() {
+        const query = `
+      SELECT * FROM "Request"
+    `;
+        const result = await this.entityManager.query(query);
+        return result;
+    }
+    async updateUserRequest(id, updateRequestDto) {
+        const currentRequest = await this.getRequest(id);
+        if (!currentRequest) {
+            throw new common_1.NotFoundException(`Request with id ${id} not found`);
+        }
+        const { amount, customerAddress, requirements } = updateRequestDto;
+        const query = `
+        UPDATE "request"
+        SET amount = $1, customerAddress = $2, requirements = $3
+        WHERE id = $4
+        RETURNING *
+    `;
+        const values = [amount || currentRequest.amount, customerAddress || currentRequest.customerAddress, requirements || currentRequest.requirements, id];
+        const result = await this.entityManager.query(query, values);
+        if (result.length > 0) {
+            return result[0];
+        }
+        else {
+            throw new common_1.NotFoundException(`Request with id ${id} not found after update`);
+        }
+    }
+    async updateAdminRequest(id, updateRequestDto) {
+        const currentRequest = await this.getRequest(id);
+        if (!currentRequest) {
+            throw new common_1.NotFoundException(`Request with id ${id} not found`);
+        }
+        const { workerId } = updateRequestDto;
+        const query = `
+        UPDATE "request"
+        SET workerId = $1,
+        WHERE id = $2
+        RETURNING *
+    `;
+        const values = [workerId || currentRequest.worker, id];
+        const result = await this.entityManager.query(query, values);
+        if (result.length > 0) {
+            return result[0];
+        }
+        else {
+            throw new common_1.NotFoundException(`Request with id ${id} not found after update`);
+        }
+    }
+    async deleteRequest(id) {
+        const query = `
+      DELETE FROM "Request"
+      WHERE id = $1
+    `;
+        const values = [id];
+        await this.entityManager.query(query, values);
+    }
+    async getAllUserRequests(userId) {
+        const query = `
+      SELECT * FROM "Request
+      WHERE clientId = $1"
+    `;
+        const values = [userId];
+        const result = await this.entityManager.query(query, values);
+        return result;
     }
 };
 RequestService = __decorate([
@@ -3026,7 +3306,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({ type: String, nullable: false, required: true }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], WorkerDto.prototype, "currentState", void 0);
+], WorkerDto.prototype, "currentstate", void 0);
 exports.WorkerDto = WorkerDto;
 
 
@@ -3233,7 +3513,7 @@ let WorkerService = class WorkerService {
       VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING *
     `;
-        const values = [worker.name, worker.surname, worker.age, worker.salary, worker.category, worker.currentState];
+        const values = [worker.name, worker.surname, worker.age, worker.salary, worker.category, worker.currentstate];
         const result = await this.entityManager.query(query, values);
         return result[0];
     }

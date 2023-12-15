@@ -24,5 +24,5 @@ export class WorkerDto {
 
   @ApiProperty({ type: String, nullable: false, required: true })
   @IsString()
-  currentState: string;
+  currentstate: string;
 }

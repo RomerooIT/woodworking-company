@@ -1,5 +1,6 @@
 import { Roles } from 'src/auth/core';
 import { BasketEntity } from 'src/basket/basket.entity';
+import { RequestEntity } from 'src/request/request.entity';
 import { SupportEntity } from 'src/support/support.entity';
 import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -23,6 +24,6 @@ export class UserEntity {
   @OneToMany(() => SupportEntity,  (entity) => entity.client)
   supportMessage: SupportEntity
 
-  // @OneToOne(() => BasketEntity)
-  // basket: BasketEntity
+  // @OneToMany(() => RequestEntity, (entity) => entity.client)
+  // request: RequestEntity
 }

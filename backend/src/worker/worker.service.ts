@@ -15,7 +15,7 @@ export class WorkerService {
       VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING *
     `;
-    const values = [worker.name, worker.surname, worker.age, worker.salary, worker.category, worker.currentState];
+    const values = [worker.name, worker.surname, worker.age, worker.salary, worker.category, worker.currentstate];
     const result = await this.entityManager.query(query, values);
     return result[0];
   }

@@ -7,7 +7,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn
 @Entity({name: 'Request'})
 export class RequestEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @ManyToOne(() => UserEntity, { nullable: false })
   @JoinColumn()
@@ -28,9 +28,9 @@ export class RequestEntity {
   amount: number
 
   @Column({nullable: true})
-  requirements: string
+  requirements?: string
 
   @ManyToOne(() => WorkerEntity, {nullable: true})
   @JoinColumn()
-  worker: WorkerEntity
+  worker?: WorkerEntity
 }
