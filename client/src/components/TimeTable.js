@@ -1,92 +1,86 @@
 import React from 'react';
-import {
-    MDBCard,
-    MDBCardBody,
-    MDBCardTitle, MDBCol,
-    MDBContainer, MDBPagination, MDBPaginationItem, MDBPaginationLink, MDBRow,
-    MDBTable,
-    MDBTableBody,
-    MDBTableHead
-} from 'mdb-react-ui-kit';
-import TimeTableDay from "./TimeTableDay";
+import '../styles/style1.css';
+// import { products, seffy } from './dummyData.js';
 
-
-const TimeTable = () => {
-    const TimeTableData = {
-        weeks: [
-            {
-                num: 1,
-                days: [
-                    {day: "Понедельник",
-                        pairs: [["Физкультура", "10:30", "11:50", "Практическое занятие", "Физрук Физрукович"],
-                            ["ТВИМС", "12:10", "13:30", "Лекция", "Математица Математичная"]]},
-                    {day: "Вторник",
-                        pairs: [["Физкультура", "10:30", "11:50", "Практическое занятие", "Физрук Физрукович"],
-                            ["ТВИМС", "12:10", "13:30", "Лекция", "Математица Математичная"]]},
-                    {day: "Среда",
-                        pairs: [["Физкультура", "10:30", "11:50", "Практическое занятие", "Физрук Физрукович"],
-                            ["Непонятная пара", "23:59", "32:95", "Лаборатоная работа", "Ночная ночь"],
-                            ["ТВИМС", "12:10", "13:30", "Лекция", "Математица Математичная"]]},
-                    {day: "Четверг",
-                        pairs: [["Физкультура", "10:30", "11:50", "Практическое занятие", "Физрук Физрукович"],
-                            ["ТВИМС", "12:10", "13:30", "Лекция", "Математица Математичная"]]},
-                    {day: "Пятница",
-                        pairs: [["Физкультура", "10:30", "11:50", "Практическое занятие", "Физрук Физрукович"],
-                            ["ТВИМС", "12:10", "13:30", "Лекция", "Математица Математичная"]]},
-                    {day: "Суббота",
-                        pairs: []},
-                    {day: "Воскресенье",
-                        pairs: []},
-                ]
-            },{}
-        ]
-    }
-
+class Product extends React.Component {
+  render() {
     return (
-        <section style={{ backgroundColor: '#eee' }}>
-            <MDBContainer className="py-5">
-                {/*{TimeTableData.weeks.length}
-                <MDBPagination>
-                    <MDBPaginationItem>
-                        <MDBPaginationLink href="#">
-                            #
-                        </MDBPaginationLink>
-                    </MDBPaginationItem>
-                </MDBPagination>*/
-
-                /*<MDBRow><MDBCol>*/}
-
-                <MDBRow>
-                    <MDBCol lg="3">
-                        {TimeTableDay(TimeTableData.weeks[0].days[0])}
-                    </MDBCol>
-                    <MDBCol lg="3">
-                        {TimeTableDay(TimeTableData.weeks[0].days[1])}
-                    </MDBCol>
-                    <MDBCol lg="3">
-                        {TimeTableDay(TimeTableData.weeks[0].days[2])}
-                    </MDBCol>
-                    <MDBCol lg="3">
-                        {TimeTableDay(TimeTableData.weeks[0].days[3])}
-                    </MDBCol>
-                </MDBRow>
-                <MDBRow className="py-2">
-                </MDBRow>
-                <MDBRow>
-                    <MDBCol lg="3">
-                        {TimeTableDay(TimeTableData.weeks[0].days[4])}
-                    </MDBCol>
-                    <MDBCol lg="3">
-                        {TimeTableDay(TimeTableData.weeks[0].days[5])}
-                    </MDBCol>
-                    <MDBCol lg="3">
-                        {TimeTableDay(TimeTableData.weeks[0].days[6])}
-                    </MDBCol>
-                </MDBRow>
-
-            </MDBContainer>
-        </section>
+      <div className="ProductItem">
+        <div className="image">
+          <img src={this.props.productImageUrl} />
+        </div>
+        <div className="middle aligned content">
+          <div className="description">
+            <div>id:{this.props.id}</div>
+            <p>title:{this.props.title}</p>
+            <p>description:{this.props.description}</p>
+          </div>
+          <div className="extra">
+            <span>Submitted by:</span>
+            <img className="avatar-image" src={this.props.submitterAvatarUrl} />
+          </div>
+        </div>
+      </div>
     );
-};
+  }
+}
 
-export default TimeTable;
+export const products = [
+    {
+      id: 1,
+      title: 'Yellow Pail',
+      description: 'On-demand sand castle construction expertise.',
+      url: '#',
+      submitterAvatarUrl:
+        'https://avataaars.io/?avatarStyle=Circle&topType=LongHairNotTooLong&accessoriesType=Prescription01&hairColor=Brown&facialHairType=MoustacheMagnum&facialHairColor=BrownDark&clotheType=Overall&clotheColor=Gray01&eyeType=Squint&eyebrowType=SadConcerned&mouthType=Grimace&skinColor=Tanned',
+      productImageUrl: 'https://via.placeholder.com/250'
+    },
+    {
+      id: 2,
+      title: 'Jake',
+      description: 'dasdasdas sdsad n expertise.',
+      url: '#',
+      submitterAvatarUrl:
+        'https://avataaars.io/?avatarStyle=Circle&topType=LongHairNotTooLong&accessoriesType=Prescription01&hairColor=Brown&facialHairType=MoustacheMagnum&facialHairColor=BrownDark&clotheType=Overall&clotheColor=Gray01&eyeType=Squint&eyebrowType=SadConcerned&mouthType=Grimace&skinColor=Tanned',
+      productImageUrl: 'https://via.placeholder.com/250'
+    },
+    {
+      id: 3,
+      title: 'Roger',
+      description: 'dasdasdas sdsad n expertise.',
+      url: '#',
+      submitterAvatarUrl:
+        'https://avataaars.io/?avatarStyle=Circle&topType=LongHairNotTooLong&accessoriesType=Prescription01&hairColor=Brown&facialHairType=MoustacheMagnum&facialHairColor=BrownDark&clotheType=Overall&clotheColor=Gray01&eyeType=Squint&eyebrowType=SadConcerned&mouthType=Grimace&skinColor=Tanned',
+      productImageUrl: 'https://via.placeholder.com/250'
+    }
+  ];
+  
+  export const seffy = 'joeSeffy1';
+  
+
+
+class ProductList extends React.Component {
+  render() {
+    const products = this.props.products;
+    return products.map(product => (
+      <Product
+        id={product.id}
+        title={product.title}
+        description={product.description}
+        url={product.url}
+        votes={product.votes}
+        submitterAvatarUrl={product.submitterAvatarUrl}
+        productImageUrl={product.productImageUrl}
+      />
+    ));
+  }
+}
+
+export default function App() {
+  return (
+    <div>
+      <h1>{seffy}</h1>
+      <ProductList products={products} />
+    </div>
+  );
+}
