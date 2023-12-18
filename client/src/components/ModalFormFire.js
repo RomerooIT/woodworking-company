@@ -1,59 +1,55 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import axios from 'axios'
+import axios from 'axios';
 
-export async function run() {
-  const url = `https://127.0.0.1:7891/api/product`;
+const baseURL = 'https://localhost:7891/api/worker';
+
+const deleteWorker = async (id) => {
+  const url = `${baseURL}/${id}`;
 
   try {
-    const response = await axios({
-      method: "GET",
-      url: url,
-    });
-
-    return {
-      response: response,
-    };
+    const response = await axios.delete(url);
+    return response.data;
   } catch (error) {
-    console.error(error);
-    return {
-      error: "An error occurred while fetching data from the TreeShop backend API.",
-    };
+    throw error;
   }
-}
+};
 
-const ModalFormFire = ({ active, setActive, info }) => {
-    const handleDismiss = () => {
-        setActive(false);
-    };
+const ModalFormFire = ({ active, setActive, info, handleFire, id }) => {
+  const handleDismiss = () => {
+    setActive(false);
+  };
 
-    
+  const handleFireClick = async () => {
+    try {
+      await deleteWorker(id);
+      console.log(`Сотрудник с ID ${id} уволен`);
+      handleFire(); // Обновляем состояние в WorkersTable
+      setActive(false);
+    } catch (error) {
+      console.error(error);
+      // Обработка ошибки, например, показ сообщения об ошибке пользователю
+    }
+  };
 
-    const handleFire = () => {
-        // Здесь вы можете добавить логику увольнения сотрудника
-        //console.log(`Сотрудник с ID ${info[0]} уволен`);
-        setActive(false);
-        console.log(run())
-    };
-
-    return (
-        <Modal show={active} onHide={handleDismiss}>
-            <Modal.Header closeButton>
-                <Modal.Title>Увольнение сотрудника</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <p>Вы уверены, что хотите уволить данного сотрудника?</p>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={handleDismiss}>
-                    Нет
-                </Button>
-                <Button variant="danger" onClick={handleFire}>
-                    Да, уволить
-                </Button>
-            </Modal.Footer>
-        </Modal>
-    );
+  return (
+    <Modal show={active} onHide={handleDismiss}>
+      <Modal.Header closeButton>
+        <Modal.Title>Увольнение сотрудника</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>Вы уверены, что хотите уволить данного сотрудника?</p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleDismiss}>
+          Нет
+        </Button>
+        <Button variant="danger" onClick={handleFireClick}>
+          Да, уволить
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
 };
 
 export default ModalFormFire;

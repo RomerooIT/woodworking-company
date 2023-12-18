@@ -3331,7 +3331,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d;
+var _a, _b, _c, _d, _e, _f, _g;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.WorkerController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -3358,6 +3358,19 @@ let WorkerController = class WorkerController {
     async getProducts() {
         return this.workerService.getWorkers();
     }
+    async updateProduct(id, updatedWorker) {
+        if (!id) {
+            throw new common_1.BadRequestException('Invalid id parameter');
+        }
+        const result = await this.workerService.updateWorker(id, updatedWorker);
+        return result;
+    }
+    async deleteProduct(id) {
+        if (!id) {
+            throw new common_1.BadRequestException('Invalid id parameter');
+        }
+        await this.workerService.deleteWorker(id);
+    }
 };
 __decorate([
     (0, common_1.Post)(),
@@ -3372,6 +3385,21 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
 ], WorkerController.prototype, "getProducts", null);
+__decorate([
+    (0, common_1.Put)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, typeof (_e = typeof worker_input_1.WorkerDto !== "undefined" && worker_input_1.WorkerDto) === "function" ? _e : Object]),
+    __metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
+], WorkerController.prototype, "updateProduct", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+], WorkerController.prototype, "deleteProduct", null);
 WorkerController = __decorate([
     (0, swagger_1.ApiTags)('Worker'),
     (0, common_1.Controller)('worker'),
@@ -3523,6 +3551,25 @@ let WorkerService = class WorkerService {
     `;
         const result = await this.entityManager.query(query);
         return result;
+    }
+    async deleteWorker(workerId) {
+        const query = `
+      DELETE FROM "Worker"
+      WHERE id = $1
+    `;
+        const values = [workerId];
+        await this.entityManager.query(query, values);
+    }
+    async updateWorker(workerId, updatedWorker) {
+        const query = `
+      UPDATE "Worker"
+      SET name = $2, surname = $3, age = $4, salary = $5, category = $6, currentState = $7
+      WHERE id = $1
+      RETURNING *
+    `;
+        const values = [workerId, updatedWorker.name, updatedWorker.surname, updatedWorker.age, updatedWorker.salary, updatedWorker.category, updatedWorker.currentstate];
+        const result = await this.entityManager.query(query, values);
+        return result[0];
     }
 };
 WorkerService = __decorate([

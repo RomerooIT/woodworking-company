@@ -1,23 +1,20 @@
-import { Body, Controller, Get, Param, Post, Put, UseGuards, Delete, BadRequestException, Req } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Post, Put, UseGuards, Delete, BadRequestException } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/guards';
 import { WorkerService } from './worker.service';
 import { WorkerEntity } from './worker.entity';
 import { WorkerDto } from './input/worker.input';
 
 @ApiTags('Worker')
-// @ApiBearerAuth()
-// @UseGuards(AuthGuard)
 @Controller('worker')
 export class WorkerController {
   constructor(private workerService: WorkerService) {} 
   
   @Post()
-  //@ApiConsumes('application/json')
   async createProduct(
     @Body() params: WorkerDto,
   ): Promise<WorkerEntity> {
-    const {name, surname, age, salary, category, currentstate} = params
+    const { name, surname, age, salary, category, currentstate } = params;
   
     const worker: WorkerEntity = {
       name,
@@ -28,12 +25,31 @@ export class WorkerController {
       currentstate
     };
   
-   const result = await this.workerService.createWorker(worker);
-   return result
+    const result = await this.workerService.createWorker(worker);
+    return result;
   }
 
   @Get()
   async getProducts(): Promise<WorkerEntity[]> {
     return this.workerService.getWorkers();
+  }
+
+  @Put(':id')
+  async updateProduct(@Param('id') id: number, @Body() updatedWorker: WorkerDto): Promise<WorkerEntity> {
+    if (!id) {
+      throw new BadRequestException('Invalid id parameter');
+    }
+
+    const result = await this.workerService.updateWorker(id, updatedWorker);
+    return result;
+  }
+
+  @Delete(':id')
+  async deleteProduct(@Param('id') id: number): Promise<void> {
+    if (!id) {
+      throw new BadRequestException('Invalid id parameter');
+    }
+
+    await this.workerService.deleteWorker(id);
   }
 }

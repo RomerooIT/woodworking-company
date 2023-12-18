@@ -24,6 +24,7 @@ const WorkersTable = () => {
   const [apiData, setApiData] = useState([]);
 
   const handleRowClick = (id) => {
+    console.log(`Selected Worker ID: ${id}`);
     setSelectedRow(id === selectedRow ? null : id);
   };
 
@@ -64,15 +65,16 @@ const WorkersTable = () => {
             <MDBTable align='middle'>
               <MDBTableHead dark>
                 <tr>
-                  {["ID", "Имя", "Фамилия", "Возраст", "Зарплата", "Профессия", "Текущая занятость"].map((columnName, index) => (
+                  {["Имя", "Фамилия", "Возраст", "Зарплата", "Профессия", "Текущая занятость"].map((columnName, index) => (
                     <th key={index} scope='col'>{columnName}</th>
                   ))}
                 </tr>
               </MDBTableHead>
               <MDBTableBody>
-                {apiData.map(worker =>
+                {apiData.map(worker => (
                   <tr key={worker.id} onClick={() => handleRowClick(worker.id)} style={{ background: selectedRow === worker.id ? '#b8daff' : '' }}>
-                    <td>{worker.id}</td>
+                    {/* Remove the following line to exclude the 'id' field */}
+                    {/* <td>{worker.id}</td> */}
                     <td>{worker.name}</td>
                     <td>{worker.surname}</td>
                     <td>{worker.age}</td>
@@ -80,7 +82,7 @@ const WorkersTable = () => {
                     <td>{worker.category}</td>
                     <td>{worker.currentstate}</td>
                   </tr>
-                )}
+                ))}
               </MDBTableBody>
             </MDBTable>
           </MDBCardBody>
@@ -104,8 +106,8 @@ const WorkersTable = () => {
             </MDBCol>
           </MDBRow>
         </div>
-        <ModalFormFire active={isModalFireActive} setActive={setModalFireActive} info={[selectedRow]} handleFire={handleFire} />
-        <ModalFormEdit active={isModalEditActive} setActive={setModalEditActive} info={[selectedRow]} />
+        <ModalFormFire active={isModalFireActive} setActive={setModalFireActive} info={[selectedRow]} id={selectedRow} handleFire={handleFire} />
+        <ModalFormEdit active={isModalEditActive} setActive={setModalEditActive} info={[selectedRow]} id={selectedRow}/>
         <ModalFormAdd active={isModalAddActive} setActive={setModalAddActive} info={[selectedRow]} />
       </MDBContainer>
     </section>
@@ -113,4 +115,3 @@ const WorkersTable = () => {
 };
 
 export default WorkersTable;
-
