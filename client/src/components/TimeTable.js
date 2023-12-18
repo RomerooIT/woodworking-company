@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
-import ModalProductAdd from './ModalAddProduct';
+import ModalAddProduct from './ModalAddProduct'; // Используем правильное имя компонента
 import ModalEditProduct from './ModalEditProduct';
 import ModalDeleteProduct from './ModalDeleteProduct';
-import ModalOrderAdd from './Order'; // Import the new order modal
+import ModalOrderAdd from './Order'; // Импортируем новый компонент для заказа
 import { ShowProduct } from '../https/workersAPI';
 import '../styles/index.css';
 
@@ -98,7 +98,7 @@ const ProductList = () => {
 
   const handleOrderClick = () => {
     console.log('Кнопка "Заказать" нажата');
-    setModalOpen(true); // Open the order modal
+    setModalOpen(true); // Открываем модальное окно для заказа
   };
 
   return (
@@ -134,7 +134,8 @@ const ProductList = () => {
           setSelected={setSelectedProduct}
         />
       ))}
-      <ModalProductAdd active={isModalOpen} setActive={handleCloseModal} />
+      {/* Используем компонент ModalAddProduct для добавления продукта */}
+      <ModalAddProduct active={isModalOpen} setActive={handleCloseModal} />
       <ModalEditProduct
         active={isEditModalOpen}
         setActive={handleCloseEditModal}
@@ -148,12 +149,12 @@ const ProductList = () => {
         productId={selectedProduct ? selectedProduct.id : null}
         newSelected={selectedProduct}
       />
-      {/* Render the order modal */}
-      <ModalOrderAdd 
-      active={isModalOpen} 
-      setActive={handleCloseModal}
-      productId={selectedProduct ? selectedProduct.id : null}
-      newSelected={selectedProduct} 
+      {/* Отображаем модальное окно для заказа */}
+      <ModalAddProduct
+        active={isModalOpen}
+        setActive={handleCloseModal}
+        productId={selectedProduct ? selectedProduct.id : null}
+        newSelected={selectedProduct}
       />
     </div>
   );

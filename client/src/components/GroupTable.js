@@ -65,16 +65,19 @@ const WorkersTable = () => {
             <MDBTable align='middle'>
               <MDBTableHead dark>
                 <tr>
-                  {["Имя", "Фамилия", "Возраст", "Зарплата", "Профессия", "Текущая занятость"].map((columnName, index) => (
-                    <th key={index} scope='col'>{columnName}</th>
-                  ))}
+                  <th>ID</th> {/* Include this line to display the 'id' field */}
+                  <th>Имя</th>
+                  <th>Фамилия</th>
+                  <th>Возраст</th>
+                  <th>Зарплата</th>
+                  <th>Профессия</th>
+                  <th>Текущая занятость</th>
                 </tr>
               </MDBTableHead>
               <MDBTableBody>
                 {apiData.map(worker => (
                   <tr key={worker.id} onClick={() => handleRowClick(worker.id)} style={{ background: selectedRow === worker.id ? '#b8daff' : '' }}>
-                    {/* Remove the following line to exclude the 'id' field */}
-                    {/* <td>{worker.id}</td> */}
+                    <td>{worker.id}</td> {/* Include this line to display the 'id' field */}
                     <td>{worker.name}</td>
                     <td>{worker.surname}</td>
                     <td>{worker.age}</td>

@@ -17,27 +17,42 @@ const Auth = observer(() => {
   const isLogin = location.pathname === LOGIN_ROUTE;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [name, setFirstName] = useState('');
+  const [surname, setLastName] = useState('');
 
   const handleClick = async () => {
     try {
       let data;
       if (isLogin) {
-        // Ваш код для выполнения запроса на авторизацию пользователя
-      } else {
-        // Используем ваше API для регистрации
-        const response = await axios.post('/api/auth/sign-up', {
+        // For user login
+        const response = await axios.post('https://localhost:7891/api/auth/sign-in', {
           email,
           password,
-          firstName,
-          lastName,
         });
-
-        // Проверяем успешность регистрации
-        if (response.status === 200) {
+  
+        // Check the success of login
+        if (response.status === 201) {
+          alert('Авторизация прошла успешно.');
+          // Additional logic after successful login
+          // For example, you might set the user in your MobX store
+          user.setUser(response.data); // Assuming you have a setUser method in your MobX store
+          //redirect
+        } else {
+          alert('Что-то пошло не так при авторизации.');
+        }
+      } else {
+        // For user registration
+        const response = await axios.post('https://localhost:7891/api/auth/sign-up', {
+          email,
+          password,
+          name,
+          surname,
+        });
+  
+        // Check the success of registration
+        if (response.status === 201) {
           alert('Регистрация прошла успешно.');
-          // Дополнительная логика после успешной регистрации
+          // Additional logic after successful registration
         } else {
           alert('Что-то пошло не так при регистрации.');
         }
@@ -66,7 +81,7 @@ const Auth = observer(() => {
             <Form.Control
               className="mt-3"
               placeholder="Имя"
-              value={firstName}
+              value={name}
               onChange={(e) => setFirstName(e.target.value)}
             />
           )}
@@ -75,7 +90,7 @@ const Auth = observer(() => {
             <Form.Control
               className="mt-3"
               placeholder="Фамилия"
-              value={lastName}
+              value={surname}
               onChange={(e) => setLastName(e.target.value)}
             />
           )}

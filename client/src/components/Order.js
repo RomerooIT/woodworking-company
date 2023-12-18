@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 const ModalOrderAdd = ({ active, setActive, handleSave }) => {
@@ -7,6 +7,36 @@ const ModalOrderAdd = ({ active, setActive, handleSave }) => {
     quantity: '',
     requirements: '',
   });
+
+  useEffect(() => {
+    // Fetch and decode the token from cookies when the component mounts
+    const token = getCookie('REFRESH_TOKEN'); // Replace 'REFRESH_TOKEN' with your actual cookie name
+    const decodedToken = decodeToken(token);
+
+    // Set the user ID in the state
+    setEditedOrder((prevData) => ({ ...prevData, userId: decodedToken.id }));
+  }, []); // Empty dependency array ensures the effect runs only once
+
+  const getCookie = (name) => {
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+      const [cookieName, cookieValue] = cookie.split('=');
+      if (cookieName.trim() === name) {
+        return cookieValue;
+      }
+    }
+    return '';
+  };
+
+  const decodeToken = (token) => {
+    try {
+      const decoded = JSON.parse(atob(token.split('.')[1]));
+      return decoded;
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return {};
+    }
+  };
 
   const handleDismiss = () => {
     setActive(false);
@@ -26,6 +56,7 @@ const ModalOrderAdd = ({ active, setActive, handleSave }) => {
     }
 
     const newOrder = {
+      userId: editedOrder.userId,
       address: editedOrder.address,
       quantity: quantity,
       requirements: editedOrder.requirements,

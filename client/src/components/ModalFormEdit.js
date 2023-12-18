@@ -25,7 +25,7 @@ const ModalFormEdit = ({ active, setActive, info, handleEdit, id }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     const processedValue =
-      (name === 'age' || name === 'salary') ? parseFloat(value) : value;
+      name === 'age' || name === 'salary' ? parseFloat(value) : value;
     setEditedData((prevData) => ({
       ...prevData,
       [name]: processedValue,
