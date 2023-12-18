@@ -116,10 +116,11 @@ export class RequestService {
     await this.entityManager.query(query, values);
   }
 
-  async getAllUserRequests(userId: number): Promise<RequestEntity[]>{
+  async getAllUserRequests(userId: number): Promise<RequestEntity[]> {
     const query = `
-      SELECT * FROM "Request
-      WHERE clientId = $1"
+      SELECT *
+      FROM "Request" r
+      WHERE r."clientId" = $1
     `;
     const values = [userId];
     const result = await this.entityManager.query(query, values);

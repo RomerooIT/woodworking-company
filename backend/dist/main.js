@@ -2171,7 +2171,7 @@ let RequestController = class RequestController {
         return result;
     }
     async getRequests(clientId) {
-        return this.requestService.getAllUserRequests(clientId);
+        return await this.requestService.getAllUserRequests(clientId);
     }
     async getAllRequests() {
         return this.requestService.getRequests();
@@ -2203,7 +2203,7 @@ __decorate([
 ], RequestController.prototype, "createRequest", null);
 __decorate([
     (0, common_1.Get)('/getUserRequests'),
-    __param(0, (0, common_1.Param)('userId')),
+    __param(0, (0, common_1.Query)('userId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
@@ -2464,9 +2464,11 @@ let RequestService = class RequestService {
         await this.entityManager.query(query, values);
     }
     async getAllUserRequests(userId) {
+        console.log(userId);
         const query = `
-      SELECT * FROM "Request
-      WHERE clientId = $1"
+      SELECT *
+      FROM "Request" r
+      WHERE r."clientId" = $1
     `;
         const values = [userId];
         const result = await this.entityManager.query(query, values);

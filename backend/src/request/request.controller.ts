@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, UseGuards, Delete, BadRequestException, Req  } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseGuards, Delete, BadRequestException, Req, Query  } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/guards';
 import { RequestService } from './request.service';
@@ -40,8 +40,8 @@ export class RequestController {
   }
 
   @Get('/getUserRequests')
-  async getRequests(@Param('userId') clientId: number): Promise<RequestEntity[]> {
-    return this.requestService.getAllUserRequests(clientId);
+  async getRequests(@Query('userId') clientId: number): Promise<RequestEntity[]> {
+    return await this.requestService.getAllUserRequests(clientId);
   }
 
   @Get('/getAllRequests')
