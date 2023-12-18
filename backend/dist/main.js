@@ -2378,16 +2378,23 @@ let RequestService = class RequestService {
     async createRequest(request) {
         try {
             const query = `
-      INSERT INTO "Request" (client, product, customerAddress, amount, requirements)
-      VALUES ($1, $2, $3, $4, $5)
-      RETURNING *
-    `;
-            const values = [1, request.product, request.customerAddress, request.amount, request.requirements];
+        INSERT INTO "Request" ("clientId", "productId", "customerAddress", "amount", "requirements")
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING *
+      `;
+            const values = [
+                request.client.id,
+                request.product.id,
+                request.customerAddress,
+                request.amount,
+                request.requirements,
+            ];
             const result = await this.entityManager.query(query, values);
             return result[0];
         }
-        catch (e) {
-            console.log(e);
+        catch (error) {
+            console.error(error);
+            throw new Error('An error occurred while creating a request.');
         }
     }
     async getRequest(id) {
