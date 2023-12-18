@@ -8,21 +8,21 @@ import {
     MDBCardText,
     MDBCardBody,
     MDBCardImage,
-    MDBBtn,
-    MDBBreadcrumb,
-    MDBBreadcrumbItem,
+    // MDBBtn,
+    // MDBBreadcrumb,
+    // MDBBreadcrumbItem,
     MDBProgress,
     MDBProgressBar,
     MDBIcon,
     MDBListGroup,
     MDBListGroupItem
 } from 'mdb-react-ui-kit';
-import axios from 'axios'
-import {Button} from "react-bootstrap";
+// import axios from 'axios'
+// import {Button} from "react-bootstrap";
 
 
 const Account = () => {
-    const ref = React.useRef(null)
+    // const ref = React.useRef(null)
     return (
         <section style={{ backgroundColor: '#eee' }}>
             <MDBContainer className="py-5">
@@ -39,18 +39,9 @@ const Account = () => {
                                 <p className="text-muted mb-1">Деревообрабатывающая компания</p>
                                 <p className="text-muted mb-4">г. Рогачёв</p>
                                 <div className="d-flex justify-content-center mb-2">
-                                    {/*<MDBBtn>Delete</MDBBtn>  
-                                        <MDBBtn outline className="ms-1">Edit</MDBBtn>*/}
-                                    <Button variant="primary" className="me-1">
-                                        Delete
-                                    </Button>
-                                    <Button variant="outline-primary">
-                                        Edit
-                                    </Button>
                                 </div>
                             </MDBCardBody>
                         </MDBCard>
-
                         <MDBCard className="mb-4 mb-lg-0">
                             <MDBCardBody className="p-0">
                                 <MDBListGroup flush className="rounded-3">

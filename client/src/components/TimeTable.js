@@ -1,86 +1,162 @@
-import React from 'react';
-import '../styles/style1.css';
-// import { products, seffy } from './dummyData.js';
+import React, { useState, useEffect } from 'react';
+import { Button } from 'react-bootstrap';
+import ModalProductAdd from './ModalAddProduct';
+import ModalEditProduct from './ModalEditProduct';
+import ModalDeleteProduct from './ModalDeleteProduct';
+import ModalOrderAdd from './Order'; // Import the new order modal
+import { ShowProduct } from '../https/workersAPI';
+import '../styles/index.css';
 
-class Product extends React.Component {
-  render() {
-    return (
-      <div className="ProductItem">
-        <div className="image">
-          <img src={this.props.productImageUrl} />
-        </div>
-        <div className="middle aligned content">
-          <div className="description">
-            <div>id:{this.props.id}</div>
-            <p>title:{this.props.title}</p>
-            <p>description:{this.props.description}</p>
-          </div>
-          <div className="extra">
-            <span>Submitted by:</span>
-            <img className="avatar-image" src={this.props.submitterAvatarUrl} />
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
+const ProductRow = ({ id, material, materialtype, price, onSelect, selected, setSelected }) => {
+  const handleProductClick = () => {
+    const newSelected = selected === id ? selected : id;
+    setSelected(newSelected);
+    onSelect(newSelected);
 
-export const products = [
-    {
-      id: 1,
-      title: 'Yellow Pail',
-      description: 'On-demand sand castle construction expertise.',
-      url: '#',
-      submitterAvatarUrl:
-        'https://avataaars.io/?avatarStyle=Circle&topType=LongHairNotTooLong&accessoriesType=Prescription01&hairColor=Brown&facialHairType=MoustacheMagnum&facialHairColor=BrownDark&clotheType=Overall&clotheColor=Gray01&eyeType=Squint&eyebrowType=SadConcerned&mouthType=Grimace&skinColor=Tanned',
-      productImageUrl: 'https://via.placeholder.com/250'
-    },
-    {
-      id: 2,
-      title: 'Jake',
-      description: 'dasdasdas sdsad n expertise.',
-      url: '#',
-      submitterAvatarUrl:
-        'https://avataaars.io/?avatarStyle=Circle&topType=LongHairNotTooLong&accessoriesType=Prescription01&hairColor=Brown&facialHairType=MoustacheMagnum&facialHairColor=BrownDark&clotheType=Overall&clotheColor=Gray01&eyeType=Squint&eyebrowType=SadConcerned&mouthType=Grimace&skinColor=Tanned',
-      productImageUrl: 'https://via.placeholder.com/250'
-    },
-    {
-      id: 3,
-      title: 'Roger',
-      description: 'dasdasdas sdsad n expertise.',
-      url: '#',
-      submitterAvatarUrl:
-        'https://avataaars.io/?avatarStyle=Circle&topType=LongHairNotTooLong&accessoriesType=Prescription01&hairColor=Brown&facialHairType=MoustacheMagnum&facialHairColor=BrownDark&clotheType=Overall&clotheColor=Gray01&eyeType=Squint&eyebrowType=SadConcerned&mouthType=Grimace&skinColor=Tanned',
-      productImageUrl: 'https://via.placeholder.com/250'
-    }
-  ];
-  
-  export const seffy = 'joeSeffy1';
-  
+    console.log('Selected product id:', newSelected);
+  };
 
-
-class ProductList extends React.Component {
-  render() {
-    const products = this.props.products;
-    return products.map(product => (
-      <Product
-        id={product.id}
-        title={product.title}
-        description={product.description}
-        url={product.url}
-        votes={product.votes}
-        submitterAvatarUrl={product.submitterAvatarUrl}
-        productImageUrl={product.productImageUrl}
-      />
-    ));
-  }
-}
-
-export default function App() {
   return (
-    <div>
-      <h1>{seffy}</h1>
-      <ProductList products={products} />
+    <div
+      className={`row product ${selected === id ? 'selected' : ''}`}
+      style={{
+        backgroundColor: selected === id ? '#cce5ff' : 'inherit',
+        cursor: 'pointer',
+      }}
+      onClick={handleProductClick}
+    >
+      <div className="col-md-6 product-detail">
+        <h4>{material}</h4>
+        <p>{materialtype}</p>
+      </div>
+      <div className="col-md-4 offset-md-2 offset-md-1 product-price">
+        {price} BYN
+      </div>
     </div>
   );
-}
+};
+
+const ProductList = () => {
+  const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await ShowProduct();
+        if (response.response) {
+          setProducts(response.response.data);
+        } else {
+          console.error(response.error);
+        }
+      } catch (error) {
+        console.error('An error occurred while fetching data:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const handleProductSelection = (selected) => {
+    setSelectedProduct(selected);
+  };
+
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
+  const handleEditClick = () => {
+    if (selectedProduct) {
+      setEditModalOpen(true);
+    } else {
+      console.warn('Выберите продукт для редактирования.');
+    }
+  };
+
+  const handleCloseEditModal = () => {
+    setEditModalOpen(false);
+  };
+
+  const handleDeleteClick = () => {
+    if (selectedProduct) {
+      setDeleteModalOpen(true);
+    } else {
+      console.warn('Выберите продукт для удаления.');
+    }
+  };
+
+  const handleCloseDeleteModal = () => {
+    setDeleteModalOpen(false);
+  };
+
+  const handleOrderClick = () => {
+    console.log('Кнопка "Заказать" нажата');
+    setModalOpen(true); // Open the order modal
+  };
+
+  return (
+    <div className="container main-content">
+      <div className="row">
+        <div className="col-md-6">
+          <h1>Мои товары:</h1>
+        </div>
+        <div className="col-md-6 text-right">
+          <Button variant="success" className="mr-2" onClick={handleOpenModal}>
+            Добавить
+          </Button>{' '}
+          <Button variant="primary" className="mr-2" onClick={handleEditClick}>
+            Редактировать
+          </Button>{' '}
+          <Button variant="danger" className="mr-3" onClick={handleDeleteClick}>
+            Удалить
+          </Button>
+          <Button variant="warning" style={{ marginLeft: '8px' }} onClick={handleOrderClick}>
+            Заказать
+          </Button>
+        </div>
+      </div>
+      {products.map((product) => (
+        <ProductRow
+          key={product.id}
+          id={product.id}
+          material={product.material}
+          materialtype={product.materialtype}
+          price={product.price}
+          onSelect={(selected) => handleProductSelection(selected)}
+          selected={selectedProduct}
+          setSelected={setSelectedProduct}
+        />
+      ))}
+      <ModalProductAdd active={isModalOpen} setActive={handleCloseModal} />
+      <ModalEditProduct
+        active={isEditModalOpen}
+        setActive={handleCloseEditModal}
+        productToEdit={selectedProduct}
+        productId={selectedProduct ? selectedProduct.id : null}
+        newSelected={selectedProduct}
+      />
+      <ModalDeleteProduct
+        active={isDeleteModalOpen}
+        setActive={handleCloseDeleteModal}
+        productId={selectedProduct ? selectedProduct.id : null}
+        newSelected={selectedProduct}
+      />
+      {/* Render the order modal */}
+      <ModalOrderAdd 
+      active={isModalOpen} 
+      setActive={handleCloseModal}
+      productId={selectedProduct ? selectedProduct.id : null}
+      newSelected={selectedProduct} 
+      />
+    </div>
+  );
+};
+
+export default ProductList;

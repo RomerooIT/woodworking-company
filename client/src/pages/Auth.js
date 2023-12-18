@@ -7,18 +7,8 @@ import { NavLink, useLocation, useHistory } from 'react-router-dom';
 import { LOGIN_ROUTE, REGISTRATION_ROUTE } from '../utils/consts';
 
 import { observer } from 'mobx-react-lite';
+import axios from 'axios'; // Импортируем axios
 import { Context } from '../index';
-import { click } from '@testing-library/user-event/dist/click';
-
-// Функция для выполнения запроса на авторизацию
-const login = async (email, password) => {
-  // Ваш код для выполнения запроса на авторизацию пользователя
-};
-
-// Функция для выполнения запроса на регистрацию
-const registration = async (email, password, firstName, lastName) => {
-  // Ваш код для выполнения запроса на регистрацию пользователя
-};
 
 const Auth = observer(() => {
   const { user } = useContext(Context);
@@ -34,12 +24,24 @@ const Auth = observer(() => {
     try {
       let data;
       if (isLogin) {
-        data = await login(email, password);
+        // Ваш код для выполнения запроса на авторизацию пользователя
       } else {
-        data = await registration(email, password, firstName, lastName);
+        // Используем ваше API для регистрации
+        const response = await axios.post('/api/auth/sign-up', {
+          email,
+          password,
+          firstName,
+          lastName,
+        });
+
+        // Проверяем успешность регистрации
+        if (response.status === 200) {
+          alert('Регистрация прошла успешно.');
+          // Дополнительная логика после успешной регистрации
+        } else {
+          alert('Что-то пошло не так при регистрации.');
+        }
       }
-      user.setUser(user);
-      user.setIsAuth(true);
     } catch (e) {
       alert(e.response.data.message);
     }
@@ -60,7 +62,6 @@ const Auth = observer(() => {
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          {/* Добавленное поле имени */}
           {!isLogin && (
             <Form.Control
               className="mt-3"
@@ -70,7 +71,6 @@ const Auth = observer(() => {
             />
           )}
 
-          {/* Добавленное поле фамилии */}
           {!isLogin && (
             <Form.Control
               className="mt-3"

@@ -47,7 +47,7 @@ export class ProductService {
         throw new NotFoundException(`Product with id ${id} not found`);
     }
 
-    const { material, materialtType, price } = updateProductDto;
+    const { material, materialType, price } = updateProductDto;
 
     const query = `
         UPDATE "Product"
@@ -56,7 +56,7 @@ export class ProductService {
         RETURNING *
     `;
 
-    const values = [material || currentProduct.material, materialtType || currentProduct.materialtype, price || currentProduct.price, id];
+    const values = [material || currentProduct.material, materialType || currentProduct.materialtype, price || currentProduct.price, id];
 
     const result = await this.entityManager.query(query, values);
 

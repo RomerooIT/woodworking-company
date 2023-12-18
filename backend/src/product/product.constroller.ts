@@ -16,9 +16,9 @@ export class ProductController {
   async createProduct(
     @Body() params: ProductDto,
   ): Promise<ProductEntity> {
-    const {material, materialtType, price} = params
+    const {material, materialType, price} = params
 
-    console.log(params.materialtType)
+    console.log(params.materialType)
   
     if (isNaN(price)) {
       throw new BadRequestException('Invalid price value');
@@ -26,7 +26,7 @@ export class ProductController {
   
     const product: ProductEntity = {
       material,
-      materialtype: materialtType,
+      materialtype: materialType,
       price: price
     };
   
@@ -46,6 +46,7 @@ export class ProductController {
 
   @Put('/:id')
     async updateProduct(@Param('id') id: number, @Body() productDto: ProductDto) {
+
         const currentProduct = await this.productService.getProduct(id);
         if (!currentProduct) {
             return null;

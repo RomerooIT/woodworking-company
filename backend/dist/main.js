@@ -1725,7 +1725,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({ type: String, nullable: false, required: true }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], ProductDto.prototype, "materialtType", void 0);
+], ProductDto.prototype, "materialType", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: Number, nullable: false, required: true }),
     (0, class_validator_1.IsNumber)(),
@@ -1767,14 +1767,14 @@ let ProductController = class ProductController {
         this.productService = productService;
     }
     async createProduct(params) {
-        const { material, materialtType, price } = params;
-        console.log(params.materialtType);
+        const { material, materialType, price } = params;
+        console.log(params.materialType);
         if (isNaN(price)) {
             throw new common_1.BadRequestException('Invalid price value');
         }
         const product = {
             material,
-            materialtype: materialtType,
+            materialtype: materialType,
             price: price
         };
         const result = await this.productService.createProduct(product);
@@ -1861,11 +1861,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ProductEntity = void 0;
 const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
-var MaterialtTypeEnum;
-(function (MaterialtTypeEnum) {
-    MaterialtTypeEnum["tree"] = "tree";
-    MaterialtTypeEnum["metal"] = "metal";
-})(MaterialtTypeEnum || (MaterialtTypeEnum = {}));
+var MaterialTypeEnum;
+(function (MaterialTypeEnum) {
+    MaterialTypeEnum["tree"] = "tree";
+    MaterialTypeEnum["metal"] = "metal";
+})(MaterialTypeEnum || (MaterialTypeEnum = {}));
 let ProductEntity = class ProductEntity {
 };
 __decorate([
@@ -1877,7 +1877,7 @@ __decorate([
     __metadata("design:type", String)
 ], ProductEntity.prototype, "material", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: false, default: MaterialtTypeEnum.tree, name: 'materialtype' }),
+    (0, typeorm_1.Column)({ nullable: false, default: MaterialTypeEnum.tree, name: 'materialtype' }),
     __metadata("design:type", String)
 ], ProductEntity.prototype, "materialtype", void 0);
 __decorate([
@@ -1984,14 +1984,14 @@ let ProductService = class ProductService {
         if (!currentProduct) {
             throw new common_1.NotFoundException(`Product with id ${id} not found`);
         }
-        const { material, materialtType, price } = updateProductDto;
+        const { material, materialType, price } = updateProductDto;
         const query = `
         UPDATE "Product"
         SET material = $1, materialtype = $2, price = $3
         WHERE id = $4
         RETURNING *
     `;
-        const values = [material || currentProduct.material, materialtType || currentProduct.materialtype, price || currentProduct.price, id];
+        const values = [material || currentProduct.material, materialType || currentProduct.materialtype, price || currentProduct.price, id];
         const result = await this.entityManager.query(query, values);
         if (result.length > 0) {
             return result[0];

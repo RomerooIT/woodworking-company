@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-enum MaterialtTypeEnum {
+enum MaterialTypeEnum {
   tree = 'tree',
   metal = 'metal'
 }
@@ -13,7 +13,7 @@ export class ProductEntity {
   @Column({nullable: false})
   material: string;
 
-  @Column({nullable: false, default: MaterialtTypeEnum.tree, name: 'materialtype'})
+  @Column({nullable: false, default: MaterialTypeEnum.tree, name: 'materialtype'})
   materialtype: string 
 
   @Column({nullable: false})

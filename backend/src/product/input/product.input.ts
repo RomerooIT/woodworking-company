@@ -8,7 +8,7 @@ export class ProductDto {
 
   @ApiProperty({ type: String, nullable: false, required: true })
   @IsString()
-  materialtType: string;
+  materialType: string;
 
   @ApiProperty({ type: Number, nullable: false, required: true })
   @IsNumber()
