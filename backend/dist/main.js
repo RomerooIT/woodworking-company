@@ -2648,7 +2648,7 @@ let SessionService = class SessionService {
         this.redis = redis;
     }
     async createSession(sessionId, user, payload) {
-        const expriedAt = Date.now() + 10000000;
+        const expriedAt = Date.now() + 1000000000000000000000000000;
         const session = await this.sessionRepository.save({
             user,
             expiredAt: new Date(expriedAt),
