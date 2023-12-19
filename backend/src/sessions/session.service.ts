@@ -13,7 +13,7 @@ export class SessionService {
   ) {}
 
   async createSession(sessionId: string, user: UserEntity, payload: string) {
-    const expriedAt = Date.now() + 1000000000000000000000000000;
+    const expriedAt = Date.now() + 100000000000000;
 
     const session = await this.sessionRepository.save({
       user,
