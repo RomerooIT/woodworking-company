@@ -62,9 +62,9 @@ export class RequestService {
     const { amount, customerAddress, requirements} = updateRequestDto;
 
     const query = `
-        UPDATE "request"
-        SET amount = $1, customerAddress = $2, requirements = $3
-        WHERE id = $4
+        UPDATE "Request"
+        SET "amount" = $1, "customerAddress" = $2, "requirements" = $3
+        WHERE "id" = $4
         RETURNING *
     `;
 
@@ -79,32 +79,32 @@ export class RequestService {
     }
 }
 
-  async updateAdminRequest(id: number, updateRequestDto: UpdateAdminRequestDto): Promise<RequestEntity> {
-    const currentRequest = await this.getRequest(id);
+async updateAdminRequest(id: number, updateRequestDto: UpdateAdminRequestDto): Promise<RequestEntity> {
+  const currentRequest = await this.getRequest(id);
 
-    if (!currentRequest) {
-        throw new NotFoundException(`Request with id ${id} not found`);
-    }
-
-    const { workerId } = updateRequestDto;
-
-    const query = `
-        UPDATE "request"
-        SET workerId = $1,
-        WHERE id = $2
-        RETURNING *
-    `;
-
-    const values = [ workerId || currentRequest.worker, id];
-
-    const result = await this.entityManager.query(query, values);
-
-    if (result.length > 0) {
-        return result[0];
-    } else {
-        throw new NotFoundException(`Request with id ${id} not found after update`);
-    }
+  if (!currentRequest) {
+    throw new NotFoundException(`Request with id ${id} not found`);
   }
+
+  const { workerId, status } = updateRequestDto;
+
+  const query = `
+    UPDATE "Request"
+    SET "workerId" = $1, "status" = $2
+    WHERE "id" = $3
+    RETURNING *
+  `;
+
+  const values = [workerId || currentRequest.worker?.id, status || currentRequest.status, id];
+
+  const result = await this.entityManager.query(query, values);
+
+  if (result.length > 0) {
+    return result[0];
+  } else {
+    throw new NotFoundException(`Request with id ${id} not found after update`);
+  }
+}
 
 
   async deleteRequest(id: number): Promise<void> {

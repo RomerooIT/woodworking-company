@@ -50,7 +50,7 @@ export class RequestController {
   }
 
   @Put('/putForUsers')
-    async updateRequest(@Param('id') id: number, @Body() updateRequestDto: UpdateUserRequestDto) {
+    async updateRequest(@Query('id') id: number, @Body() updateRequestDto: UpdateUserRequestDto) {
         const currentRequest = await this.requestService.getRequest(id);
         if (!currentRequest) {
             return null;
@@ -63,7 +63,7 @@ export class RequestController {
 
 
   @Put('/putForAdmins')
-  async updateUserRequest(@Param('id') id: number, @Body() updateRequestDto: UpdateAdminRequestDto) {
+  async updateUserRequest(@Query('id') id: number, @Body() updateRequestDto: UpdateAdminRequestDto) {
       const currentRequest = await this.requestService.getRequest(id);
       if (!currentRequest) {
           return null;

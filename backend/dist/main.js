@@ -2098,6 +2098,11 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], UpdateAdminRequestDto.prototype, "workerId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: String, nullable: false, required: false }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateAdminRequestDto.prototype, "status", void 0);
 exports.UpdateAdminRequestDto = UpdateAdminRequestDto;
 class UpdateUserRequestDto {
 }
@@ -2216,7 +2221,7 @@ __decorate([
 ], RequestController.prototype, "getAllRequests", null);
 __decorate([
     (0, common_1.Put)('/putForUsers'),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Query)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, typeof (_h = typeof update_request_input_1.UpdateUserRequestDto !== "undefined" && update_request_input_1.UpdateUserRequestDto) === "function" ? _h : Object]),
@@ -2224,7 +2229,7 @@ __decorate([
 ], RequestController.prototype, "updateRequest", null);
 __decorate([
     (0, common_1.Put)('/putForAdmins'),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Query)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, typeof (_j = typeof update_request_input_1.UpdateAdminRequestDto !== "undefined" && update_request_input_1.UpdateAdminRequestDto) === "function" ? _j : Object]),
@@ -2303,6 +2308,10 @@ __decorate([
     (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", typeof (_c = typeof worker_entity_1.WorkerEntity !== "undefined" && worker_entity_1.WorkerEntity) === "function" ? _c : Object)
 ], RequestEntity.prototype, "worker", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true, default: 'Awaiting confirmation..' }),
+    __metadata("design:type", String)
+], RequestEntity.prototype, "status", void 0);
 RequestEntity = __decorate([
     (0, typeorm_1.Entity)({ name: 'Request' })
 ], RequestEntity);
@@ -2420,9 +2429,9 @@ let RequestService = class RequestService {
         }
         const { amount, customerAddress, requirements } = updateRequestDto;
         const query = `
-        UPDATE "request"
-        SET amount = $1, customerAddress = $2, requirements = $3
-        WHERE id = $4
+        UPDATE "Request"
+        SET "amount" = $1, "customerAddress" = $2, "requirements" = $3
+        WHERE "id" = $4
         RETURNING *
     `;
         const values = [amount || currentRequest.amount, customerAddress || currentRequest.customerAddress, requirements || currentRequest.requirements, id];
@@ -2435,18 +2444,19 @@ let RequestService = class RequestService {
         }
     }
     async updateAdminRequest(id, updateRequestDto) {
+        var _a;
         const currentRequest = await this.getRequest(id);
         if (!currentRequest) {
             throw new common_1.NotFoundException(`Request with id ${id} not found`);
         }
-        const { workerId } = updateRequestDto;
+        const { workerId, status } = updateRequestDto;
         const query = `
-        UPDATE "request"
-        SET workerId = $1,
-        WHERE id = $2
-        RETURNING *
-    `;
-        const values = [workerId || currentRequest.worker, id];
+    UPDATE "Request"
+    SET "workerId" = $1, "status" = $2
+    WHERE "id" = $3
+    RETURNING *
+  `;
+        const values = [workerId || ((_a = currentRequest.worker) === null || _a === void 0 ? void 0 : _a.id), status || currentRequest.status, id];
         const result = await this.entityManager.query(query, values);
         if (result.length > 0) {
             return result[0];
@@ -2464,7 +2474,6 @@ let RequestService = class RequestService {
         await this.entityManager.query(query, values);
     }
     async getAllUserRequests(userId) {
-        console.log(userId);
         const query = `
       SELECT *
       FROM "Request" r

@@ -33,4 +33,7 @@ export class RequestEntity {
   @ManyToOne(() => WorkerEntity, {nullable: true})
   @JoinColumn()
   worker?: WorkerEntity
+
+  @Column({nullable: true, default: 'Awaiting confirmation..'})
+  status?: string;
 }

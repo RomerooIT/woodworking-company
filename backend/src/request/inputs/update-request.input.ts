@@ -6,6 +6,10 @@ export class UpdateAdminRequestDto {
   @ApiProperty({ type: Number, nullable: false, required: false })
   @IsNumber()
   workerId: number;
+
+  @ApiProperty({ type: String, nullable: false, required: false })
+  @IsString()
+  status: string;
 }
 
 
