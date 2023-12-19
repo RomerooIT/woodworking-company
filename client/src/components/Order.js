@@ -1,39 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-const ModalOrderAdd = ({ active, setActive, handleSave }) => {
+const ModalOrderAdd = ({ active, setActive, handleSave, newSelected, products }) => {
   const [editedOrder, setEditedOrder] = useState({
-    address: '',
-    quantity: '',
+    customerAddress: '',
+    amount: '',
     requirements: '',
+    userId: 0,
   });
 
   useEffect(() => {
-    // Fetch and decode the token from cookies when the component mounts
-    const token = getCookie('REFRESH_TOKEN'); // Replace 'REFRESH_TOKEN' with your actual cookie name
+    const token = localStorage.getItem('REFRESH_TOKEN');
+    console.log('Current token:', token);
+
     const decodedToken = decodeToken(token);
+    console.log('Decoded token:', decodedToken);
 
-    // Set the user ID in the state
-    setEditedOrder((prevData) => ({ ...prevData, userId: decodedToken.id }));
-  }, []); // Empty dependency array ensures the effect runs only once
-
-  const getCookie = (name) => {
-    const cookies = document.cookie.split(';');
-    for (let cookie of cookies) {
-      const [cookieName, cookieValue] = cookie.split('=');
-      if (cookieName.trim() === name) {
-        return cookieValue;
-      }
-    }
-    return '';
-  };
+    setEditedOrder((prevData) => ({ ...prevData, userId: parseInt(decodedToken.id, 10) || 0 }));
+  }, []);
 
   const decodeToken = (token) => {
     try {
       const decoded = JSON.parse(atob(token.split('.')[1]));
       return decoded;
     } catch (error) {
-      console.error('Error decoding token:', error);
+      console.error('Ошибка декодирования токена:', error);
       return {};
     }
   };
@@ -48,22 +39,33 @@ const ModalOrderAdd = ({ active, setActive, handleSave }) => {
   };
 
   const handleSaveChanges = () => {
-    const quantity = parseInt(editedOrder.quantity);
+    const selectedProduct = products.find((product) => product.id === newSelected);
 
-    if (isNaN(quantity)) {
-      console.error('Invalid quantity value');
+    if (!selectedProduct) {
+      console.error('Выбранный продукт не найден');
       return;
     }
 
+    if (
+      typeof editedOrder.customerAddress !== 'string' ||
+      isNaN(parseFloat(editedOrder.amount)) ||
+      isNaN(parseInt(editedOrder.userId, 10))
+    ) {
+      console.error('Ошибка в типах данных');
+      return;
+    }
+
+    console.log('Current user ID:', editedOrder.userId);
+
     const newOrder = {
-      userId: editedOrder.userId,
-      address: editedOrder.address,
-      quantity: quantity,
+      clientId: editedOrder.userId,
+      productId: newSelected,
+      customerAddress: editedOrder.customerAddress,
+      amount: parseFloat(editedOrder.amount),
       requirements: editedOrder.requirements,
     };
 
-    // Replace the URL and method with your actual API endpoint and request method
-    fetch('https://localhost:7891/api/order', {
+    fetch('https://localhost:7891/api/request', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -72,21 +74,21 @@ const ModalOrderAdd = ({ active, setActive, handleSave }) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('New order added:', data);
+        console.log('Добавлен новый заказ:', data);
         handleSave(newOrder);
         handleDismiss();
       })
       .catch((error) => {
-        console.error('Error adding order:', error);
+        console.error('Ошибка при добавлении заказа:', error);
         handleDismiss();
       });
   };
 
   const handleKeyPress = (e) => {
     if (e.key === 'ArrowUp') {
-      // Handle moving to the previous form field
+      // Обработка перехода к предыдущему полю формы
     } else if (e.key === 'ArrowDown') {
-      // Handle moving to the next form field
+      // Обработка перехода к следующему полю формы
     }
   };
 
@@ -101,18 +103,18 @@ const ModalOrderAdd = ({ active, setActive, handleSave }) => {
             <Form.Label>Адрес доставки</Form.Label>
             <Form.Control
               type="text"
-              name="address"
-              value={editedOrder.address}
+              name="customerAddress"
+              value={editedOrder.customerAddress}
               onChange={handleChange}
               tabIndex="1"
             />
           </Form.Group>
-          <Form.Group controlId="formQuantity">
+          <Form.Group controlId="formAmount">
             <Form.Label>Количество выбранного товара</Form.Label>
             <Form.Control
               type="text"
-              name="quantity"
-              value={editedOrder.quantity}
+              name="amount"
+              value={editedOrder.amount}
               onChange={handleChange}
               tabIndex="2"
             />

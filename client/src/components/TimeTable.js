@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
-import ModalAddProduct from './ModalAddProduct'; // Используем правильное имя компонента
+import ModalAddProduct from './ModalAddProduct';
 import ModalEditProduct from './ModalEditProduct';
 import ModalDeleteProduct from './ModalDeleteProduct';
-import ModalOrderAdd from './Order'; // Импортируем новый компонент для заказа
+import ModalOrder from './Order'; // Corrected import
 import { ShowProduct } from '../https/workersAPI';
 import '../styles/index.css';
 
@@ -42,6 +42,7 @@ const ProductList = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isOrderModalOpen, setOrderModalOpen] = useState(false); // Added state for the order modal
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -98,7 +99,7 @@ const ProductList = () => {
 
   const handleOrderClick = () => {
     console.log('Кнопка "Заказать" нажата');
-    setModalOpen(true); // Открываем модальное окно для заказа
+    setOrderModalOpen(true); // Open the order modal
   };
 
   return (
@@ -111,13 +112,28 @@ const ProductList = () => {
           <Button variant="success" className="mr-2" onClick={handleOpenModal}>
             Добавить
           </Button>{' '}
-          <Button variant="primary" className="mr-2" onClick={handleEditClick}>
+          <Button
+            variant="primary"
+            className="mr-2"
+            onClick={handleEditClick}
+            disabled={!selectedProduct}
+          >
             Редактировать
           </Button>{' '}
-          <Button variant="danger" className="mr-3" onClick={handleDeleteClick}>
+          <Button
+            variant="danger"
+            className="mr-3"
+            onClick={handleDeleteClick}
+            disabled={!selectedProduct}
+          >
             Удалить
           </Button>
-          <Button variant="warning" style={{ marginLeft: '8px' }} onClick={handleOrderClick}>
+          <Button
+            variant="warning"
+            style={{ marginLeft: '8px' }}
+            onClick={handleOrderClick}
+            disabled={!selectedProduct}
+          >
             Заказать
           </Button>
         </div>
@@ -134,7 +150,6 @@ const ProductList = () => {
           setSelected={setSelectedProduct}
         />
       ))}
-      {/* Используем компонент ModalAddProduct для добавления продукта */}
       <ModalAddProduct active={isModalOpen} setActive={handleCloseModal} />
       <ModalEditProduct
         active={isEditModalOpen}
@@ -149,13 +164,11 @@ const ProductList = () => {
         productId={selectedProduct ? selectedProduct.id : null}
         newSelected={selectedProduct}
       />
-      {/* Отображаем модальное окно для заказа */}
-      <ModalAddProduct
-        active={isModalOpen}
-        setActive={handleCloseModal}
-        productId={selectedProduct ? selectedProduct.id : null}
-        newSelected={selectedProduct}
-      />
+      <ModalOrder 
+      active={isOrderModalOpen} 
+      setActive={() => setOrderModalOpen(false)}
+      newSelected={selectedProduct}
+      products={products}  />
     </div>
   );
 };

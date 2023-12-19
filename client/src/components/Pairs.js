@@ -1,57 +1,115 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-    MDBCard,
-    MDBCardBody,
-    MDBCardTitle,
-    MDBCardText,
-    // MDBBtn,
-    MDBRow,
-    // MDBCardGroup,
-    MDBCol,
+  MDBCard,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCardText,
+  MDBRow,
+  MDBCol,
 } from 'mdb-react-ui-kit';
 
-import {Button} from "react-bootstrap";
-import ModalForm from "./ModalForm4";
-// import {values} from "mobx";
-// import {defaults} from "axios";
-let btnInfo={}
 const Pairs = () => {
-    const [modal,setModal]=useState(false)
-    const toggleShow = () => {
-        setModal(!modal)
-    };
-    const Pairs=[
-        {id:1,title:'Заявка',group:'021703',teacher:'Физрук Физрукович',type:'Практическое занятие',time:'10:30-11:50'},
-        {id:2,title:'Заявка',group:'021703',teacher:'Физрук Физрукович',type:'Практическое занятие',time:'10:30-11:50'},
-        {id:3,title:'Заявка',group:'021703',teacher:'Ночная ночь',type:'Лаборатоная работа',time:'23:59-32:95'},
-        {id:11,title:'Заявка',group:'021703',teacher:'Ночная ночь',type:'Лаборатоная работа',time:'23:59-32:95'}
+  const [pairsData, setPairsData] = useState([]);
+  const [userId, setUserId] = useState(0);
 
-    ]
-    return (
-        <div className='w-75 ms-auto me-auto mt-2' >
-            <MDBRow className='row-cols-1 row-cols-md-5 g-4' >
-                {Pairs.map((item) =>
-                    <MDBCol>
-                        <MDBCard className='m-1' shadow='0' border='dark' background='dark'>
-                            <MDBCardBody className='text-dark'>
-                                <MDBCardTitle className='text-white'>{item.id}. {item.title}</MDBCardTitle>
-                                <MDBCardText className='text-white'>
-                                    <p>Вид товара: {item.group}</p>
-                                    <p>Материал: {item.teacher}</p>
-                                    <p>Адрес заказчикаe: {item.type}</p>
-                                    <p>Tребования: {item.time}</p>
-                                </MDBCardText>
-                                <Button size={ "sm" } variant={'outline-light'} onClick={()=>{btnInfo=item;toggleShow()}}>
-                                    Select
-                                </Button>
-                            </MDBCardBody>
-                        </MDBCard>
-                    </MDBCol>
-                )}
-                <ModalForm active={modal} setActive={setModal} info={btnInfo}/>
-            </MDBRow>
-        </div>
-    );
+  useEffect(() => {
+    const token = localStorage.getItem('REFRESH_TOKEN');
+    console.log('Current token:', token);
+
+    const decodedToken = decodeToken(token);
+    console.log('Decoded token:', decodedToken);
+
+    setUserId(parseInt(decodedToken.id, 10) || 0);
+  }, []);
+
+  useEffect(() => {
+    // Проверка, присутствует ли userId
+    if (userId) {
+      // Запрос к API, используя userId
+      fetch(`https://127.0.0.1:7891/api/request/getUserRequests?userId=${userId}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log('API Data:', data);
+          setPairsData(data);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }
+  }, [userId]);
+
+  const decodeToken = (token) => {
+    try {
+      const decoded = JSON.parse(atob(token.split('.')[1]));
+      return decoded;
+    } catch (error) {
+      console.error('Ошибка декодирования токена:', error);
+      return {};
+    }
+  };
+
+  useEffect(() => {
+    // Fetch product details for each pair
+    const fetchProductDetails = async () => {
+      const updatedPairsData = await Promise.all(
+        pairsData.map(async (item) => {
+          const productResponse = await fetch(`https://127.0.0.1:7891/api/product/${item.productId}`);
+          const productData = await productResponse.json();
+
+          return {
+            ...item,
+            productDetails: productData,
+          };
+        })
+      );
+
+      setPairsData(updatedPairsData);
+    };
+
+    if (pairsData.length > 0) {
+      fetchProductDetails();
+    }
+  }, [pairsData]);
+
+  return (
+    <div className="w-75 ms-auto me-auto mt-2">
+      {pairsData.length === 0 ? (
+        <p>No data available</p>
+      ) : (
+        <MDBRow className="row-cols-1 row-cols-md-5 g-4">
+          {pairsData.map((item, index) => (
+            <MDBCol key={index}>
+              <MDBCard className="m-1" shadow="0" border="dark" background="dark">
+                <MDBCardBody className="text-dark">
+                  <MDBCardTitle className="text-white font-weight-bolder">Заявка</MDBCardTitle>
+                  <MDBCardText className="text-white">
+                    <p className="font-weight-bolder">Адрес:</p>
+                    <p> {item.customerAddress}</p>
+                    <p className="font-weight-bolder">Количество заказанного товара:</p>
+                    <p>{item.amount}</p>
+                    <p className="font-weight-bolder">Указанные требования:</p>
+                    <p>{item.requirements}</p>
+                    <p className="font-weight-bolder">Статус:</p>
+                    <p>{item.status}</p>
+                    {item.productDetails && (
+                      <>
+                        <p className="font-weight-bolder">Наименование товара:</p>
+                        <p>{item.productDetails.material}</p>
+                        <p className="font-weight-bolder">Материал:</p>
+                        <p>{item.productDetails.materialtype}</p>
+                        <p className="font-weight-bolder">Цена:</p>
+                        <p>{item.productDetails.price} BYN</p>
+                      </>
+                    )}
+                  </MDBCardText>
+                </MDBCardBody>
+              </MDBCard>
+            </MDBCol>
+          ))}
+        </MDBRow>
+      )}
+    </div>
+  );
 };
 
 export default Pairs;

@@ -13,12 +13,12 @@ const NavBar = () => {
         <Navbar bg="dark" variant="dark">
             <Container>
 
-                <Navbar.Brand href="/Account">WoodGuru</Navbar.Brand>
+                <Navbar.Brand href="/Account">Главная</Navbar.Brand>
                 <Nav className="me-auto">
 
-                    <Nav.Link href="/Group">Workers</Nav.Link>
-                    <Nav.Link href="/Workmaterials">Requests List</Nav.Link>
-                    <Nav.Link href="/Timetable">Products</Nav.Link>
+                    <Nav.Link href="/Group">Сотрудники</Nav.Link>
+                    <Nav.Link href="/Workmaterials">Мои заявки</Nav.Link>
+                    <Nav.Link href="/Timetable">Товары</Nav.Link>
                 </Nav>
                 <Nav className="m-lg-0auto">
                     <Button size={ "sm" } variant={'outline-light'}><Nav.Link style={{color:'white'}} href={'/login'}>SELECT USER</Nav.Link></Button>
