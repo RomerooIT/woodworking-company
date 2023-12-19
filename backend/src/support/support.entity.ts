@@ -4,12 +4,16 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 't
 @Entity({name: 'Support'})
 export class SupportEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @ManyToOne(() => UserEntity, { nullable: false })
   @JoinColumn()
   client: UserEntity
 
   @Column({nullable: false})
-  question: string
+  message: string
+
+  @ManyToOne(() => UserEntity, { nullable: true })
+  @JoinColumn()
+  replyToClient?: UserEntity
 }

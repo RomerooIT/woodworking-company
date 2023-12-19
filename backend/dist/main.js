@@ -2820,24 +2820,73 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a;
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c, _d, _e;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SupportController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
-const guards_1 = __webpack_require__(/*! src/auth/guards */ "./src/auth/guards/index.ts");
 const support_service_1 = __webpack_require__(/*! ./support.service */ "./src/support/support.service.ts");
+const users_1 = __webpack_require__(/*! src/users */ "./src/users/index.ts");
 let SupportController = class SupportController {
-    constructor(supportService) {
+    constructor(supportService, userService) {
         this.supportService = supportService;
+        this.userService = userService;
+    }
+    async createRequest(clientId, message) {
+        const user = await this.userService.getById({ userId: clientId });
+        const messge = {
+            client: user.data,
+            message,
+        };
+        const result = await this.supportService.createMessage(messge);
+        return result;
+    }
+    async getUserSupportDialog(clientId) {
+        return await this.supportService.getUserSupportDialog(clientId);
+    }
+    async createMessageToUser(clientId, message, replyToClient) {
+        const me = await this.userService.getById({ userId: clientId });
+        const user = await this.userService.getById({ userId: replyToClient });
+        const messageEnt = {
+            client: me.data,
+            message,
+            replyToClient: user.data,
+        };
+        const result = await this.supportService.createMessageToUser(messageEnt);
+        return result;
     }
 };
+__decorate([
+    (0, common_1.Post)('/createMessage'),
+    __param(0, (0, common_1.Query)('clientId')),
+    __param(1, (0, common_1.Query)('message')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, String]),
+    __metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+], SupportController.prototype, "createRequest", null);
+__decorate([
+    (0, common_1.Get)('/getUserSupportDialog'),
+    __param(0, (0, common_1.Query)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
+], SupportController.prototype, "getUserSupportDialog", null);
+__decorate([
+    (0, common_1.Post)('/createMessageToUser'),
+    __param(0, (0, common_1.Query)('clientId')),
+    __param(1, (0, common_1.Query)('message')),
+    __param(2, (0, common_1.Query)('replyToClientId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, String, Number]),
+    __metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+], SupportController.prototype, "createMessageToUser", null);
 SupportController = __decorate([
     (0, swagger_1.ApiTags)('Support'),
-    (0, swagger_1.ApiBearerAuth)(),
-    (0, common_1.UseGuards)(guards_1.AuthGuard),
     (0, common_1.Controller)('support'),
-    __metadata("design:paramtypes", [typeof (_a = typeof support_service_1.SupportService !== "undefined" && support_service_1.SupportService) === "function" ? _a : Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof support_service_1.SupportService !== "undefined" && support_service_1.SupportService) === "function" ? _a : Object, typeof (_b = typeof users_1.UsersService !== "undefined" && users_1.UsersService) === "function" ? _b : Object])
 ], SupportController);
 exports.SupportController = SupportController;
 
@@ -2860,7 +2909,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SupportEntity = void 0;
 const user_entity_1 = __webpack_require__(/*! src/users/entity/user.entity */ "./src/users/entity/user.entity.ts");
@@ -2879,7 +2928,12 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ nullable: false }),
     __metadata("design:type", String)
-], SupportEntity.prototype, "question", void 0);
+], SupportEntity.prototype, "message", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.UserEntity, { nullable: true }),
+    (0, typeorm_1.JoinColumn)(),
+    __metadata("design:type", typeof (_b = typeof user_entity_1.UserEntity !== "undefined" && user_entity_1.UserEntity) === "function" ? _b : Object)
+], SupportEntity.prototype, "replyToClient", void 0);
 SupportEntity = __decorate([
     (0, typeorm_1.Entity)({ name: 'Support' })
 ], SupportEntity);
@@ -2906,10 +2960,12 @@ exports.SupportModule = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const support_controller_1 = __webpack_require__(/*! ./support.controller */ "./src/support/support.controller.ts");
 const support_service_1 = __webpack_require__(/*! ./support.service */ "./src/support/support.service.ts");
+const users_1 = __webpack_require__(/*! src/users */ "./src/users/index.ts");
 let SupportModule = class SupportModule {
 };
 SupportModule = __decorate([
     (0, common_1.Module)({
+        imports: [users_1.UsersModule],
         controllers: [support_controller_1.SupportController],
         exports: [support_service_1.SupportService],
         providers: [support_service_1.SupportService]
@@ -2945,10 +3001,58 @@ exports.SupportService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
 const typeorm_2 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
-const support_entity_1 = __webpack_require__(/*! ./support.entity */ "./src/support/support.entity.ts");
-let SupportService = class SupportService extends typeorm_1.Repository {
+let SupportService = class SupportService {
     constructor(entityManager) {
-        super(support_entity_1.SupportEntity, entityManager);
+        this.entityManager = entityManager;
+    }
+    async createMessage(message) {
+        try {
+            const query = `
+        INSERT INTO "Support" ("clientId", "message")
+        VALUES ($1, $2)
+        RETURNING *
+      `;
+            const values = [
+                message.client.id,
+                message.message,
+            ];
+            const result = await this.entityManager.query(query, values);
+            return result[0];
+        }
+        catch (error) {
+            console.error(error);
+            throw new Error('An error occurred while creating a message.');
+        }
+    }
+    async getUserSupportDialog(userId) {
+        const query = `
+      SELECT *
+      FROM "Support" r
+      WHERE r."clientId" = $1 OR r."replyToClientId" = $1
+    `;
+        const values = [userId];
+        const result = await this.entityManager.query(query, values);
+        return result;
+    }
+    async createMessageToUser(message) {
+        try {
+            const query = `
+        INSERT INTO "Support" ("clientId", "message", "replyToClientId")
+        VALUES ($1, $2, $3)
+        RETURNING *
+      `;
+            const values = [
+                message.client.id,
+                message.message,
+                message.replyToClient.id,
+            ];
+            const result = await this.entityManager.query(query, values);
+            return result[0];
+        }
+        catch (error) {
+            console.error(error);
+            throw new Error('An error occurred while creating a message.');
+        }
     }
 };
 SupportService = __decorate([
