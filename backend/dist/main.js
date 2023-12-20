@@ -2817,7 +2817,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d, _e;
+var _a, _b, _c, _d, _e, _f;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SupportController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
@@ -2852,6 +2852,9 @@ let SupportController = class SupportController {
         const result = await this.supportService.createMessageToUser(messageEnt);
         return result;
     }
+    async getUserIdsWithActiveChat() {
+        return await this.supportService.getActiveUserIdsChats();
+    }
 };
 __decorate([
     (0, common_1.Post)('/createMessage'),
@@ -2877,6 +2880,12 @@ __decorate([
     __metadata("design:paramtypes", [Number, String, Number]),
     __metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
 ], SupportController.prototype, "createMessageToUser", null);
+__decorate([
+    (0, common_1.Get)('/getUserIdsWithActiveChat'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
+], SupportController.prototype, "getUserIdsWithActiveChat", null);
 SupportController = __decorate([
     (0, swagger_1.ApiTags)('Support'),
     (0, common_1.Controller)('support'),
@@ -2999,6 +3008,9 @@ let SupportService = class SupportService {
     constructor(entityManager) {
         this.entityManager = entityManager;
     }
+    async onModuleInit() {
+        console.log(await this.getActiveUserIdsChats());
+    }
     async createMessage(message) {
         try {
             const query = `
@@ -3047,6 +3059,15 @@ let SupportService = class SupportService {
             console.error(error);
             throw new Error('An error occurred while creating a message.');
         }
+    }
+    async getActiveUserIdsChats() {
+        const query = `
+      SELECT * FROM "Support"`;
+        const allMessages = await this.entityManager.query(query);
+        const ids = [];
+        await allMessages.forEach((value) => ids.push(value.clientId));
+        const result = [...new Set(ids)];
+        return result;
     }
 };
 SupportService = __decorate([
@@ -3289,14 +3310,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a, _b;
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UsersService = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const event_emitter_1 = __webpack_require__(/*! @nestjs/event-emitter */ "@nestjs/event-emitter");
 const user_repository_1 = __webpack_require__(/*! ../repository/user.repository */ "./src/users/repository/user.repository.ts");
+const typeorm_1 = __webpack_require__(/*! @nestjs/typeorm */ "@nestjs/typeorm");
+const typeorm_2 = __webpack_require__(/*! typeorm */ "typeorm");
 let UsersService = class UsersService {
-    constructor(usersRepository, eventEmitter) {
+    constructor(entityManager, usersRepository, eventEmitter) {
+        this.entityManager = entityManager;
         this.usersRepository = usersRepository;
         this.eventEmitter = eventEmitter;
     }
@@ -3330,7 +3357,8 @@ let UsersService = class UsersService {
 };
 UsersService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [typeof (_a = typeof user_repository_1.UserRepository !== "undefined" && user_repository_1.UserRepository) === "function" ? _a : Object, typeof (_b = typeof event_emitter_1.EventEmitter2 !== "undefined" && event_emitter_1.EventEmitter2) === "function" ? _b : Object])
+    __param(0, (0, typeorm_1.InjectEntityManager)()),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.EntityManager !== "undefined" && typeorm_2.EntityManager) === "function" ? _a : Object, typeof (_b = typeof user_repository_1.UserRepository !== "undefined" && user_repository_1.UserRepository) === "function" ? _b : Object, typeof (_c = typeof event_emitter_1.EventEmitter2 !== "undefined" && event_emitter_1.EventEmitter2) === "function" ? _c : Object])
 ], UsersService);
 exports.UsersService = UsersService;
 

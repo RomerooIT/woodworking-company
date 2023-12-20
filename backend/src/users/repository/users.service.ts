@@ -9,10 +9,13 @@ import {
   UpdateUserParams,
   UpdateUserResult,
 } from './users-service.types';
+import { InjectEntityManager } from '@nestjs/typeorm';
+import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class UsersService {
   constructor(
+    @InjectEntityManager() private entityManager: EntityManager, 
     private readonly usersRepository: UserRepository,
     private readonly eventEmitter: EventEmitter2,
   ) {}

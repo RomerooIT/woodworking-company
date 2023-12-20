@@ -7,6 +7,10 @@ import { SupportEntity } from './support.entity';
 export class SupportService {
   constructor(@InjectEntityManager() private readonly entityManager: EntityManager) {}
 
+  async onModuleInit(){
+    console.log(await this.getActiveUserIdsChats())
+  }
+
 
   async createMessage(message: SupportEntity): Promise<SupportEntity> {
     try {
@@ -58,5 +62,20 @@ export class SupportService {
       console.error(error);
       throw new Error('An error occurred while creating a message.');
     }
+  }
+
+  async getActiveUserIdsChats(): Promise<any[]> {
+    const query = `
+      SELECT * FROM "Support"`;
+    //const values = [];
+    const allMessages = await this.entityManager.query(query);
+
+    const ids = []
+
+    await allMessages.forEach((value) => ids.push(value.clientId))
+
+    const result = [...new Set(ids)]
+
+    return result;
   }
 }

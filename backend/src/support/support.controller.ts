@@ -55,4 +55,9 @@ export class SupportController {
 
    return result
   }
+
+  @Get('/getUserIdsWithActiveChat')
+  async getUserIdsWithActiveChat(): Promise<any[]> {
+    return await this.supportService.getActiveUserIdsChats();
+  }
 }
