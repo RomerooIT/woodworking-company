@@ -125,22 +125,16 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 /*!*********************************************!*\
   !*** ./config/loaders/app-config.loader.ts ***!
   \*********************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.loadAppConfig = void 0;
-const fs_1 = __webpack_require__(/*! fs */ "fs");
-const path_1 = __webpack_require__(/*! path */ "path");
 const loadAppConfig = () => ({
     app: {
         host: process.env.APP_HOST,
         port: Number(process.env.APP_PORT),
         protocol: process.env.APP_PROTOCOL,
-        ssl: {
-            key: (0, fs_1.readFileSync)((0, path_1.resolve)(__dirname, '..', 'ssl', 'key.pem'), 'utf8'),
-            cert: (0, fs_1.readFileSync)((0, path_1.resolve)(__dirname, '..', 'ssl', 'cert.pem'), 'utf8'),
-        },
     },
 });
 exports.loadAppConfig = loadAppConfig;
@@ -3884,16 +3878,6 @@ module.exports = require("uuid");
 
 /***/ }),
 
-/***/ "fs":
-/*!*********************!*\
-  !*** external "fs" ***!
-  \*********************/
-/***/ ((module) => {
-
-module.exports = require("fs");
-
-/***/ }),
-
 /***/ "http":
 /*!***********************!*\
   !*** external "http" ***!
@@ -3992,10 +3976,10 @@ async function bootstrap() {
     swagger_1.SwaggerModule.setup('/docs', app, document);
     await app.init();
     const configService = app.get(config_1.ConfigService);
-    const { host, port, ssl, protocol } = configService.get('app');
+    const { host, port, protocol } = configService.get('app');
     let server;
-    if (protocol === 'https') {
-        server = https.createServer(Object.assign(Object.assign({}, ssl), { passphrase: 'my secret' }), requestListener);
+    if (protocol === 'http') {
+        server = https.createServer({ passphrase: 'my secret' }, requestListener);
     }
     else {
         server = http.createServer(requestListener);

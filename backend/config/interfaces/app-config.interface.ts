@@ -3,9 +3,9 @@ export interface AppConfigurationInterface {
     port: number;
     host: string;
     protocol: 'http' | 'https';
-    ssl: {
-      key: string;
-      cert: string;
-    };
+    // ssl: {
+    //   key: string;
+    //   cert: string;
+    // };
   };
 }

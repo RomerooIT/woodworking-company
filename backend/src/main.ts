@@ -50,12 +50,12 @@ async function bootstrap() {
   await app.init();
 
   const configService = app.get<ConfigService<ConfigInterface>>(ConfigService);
-  const { host, port, ssl, protocol } = configService.get('app');
+  const { host, port, protocol } = configService.get('app');
 
   let server: http.Server;
-  if (protocol === 'https') {
+  if (protocol === 'http') {
     server = https.createServer(
-      { ...ssl, passphrase: 'my secret' },
+      { passphrase: 'my secret' },
       requestListener,
     );
   } else {
