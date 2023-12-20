@@ -121,12 +121,12 @@ export class AuthService {
         const sessionId = `session-${Date.now()}-${v4()}`;
         const payload = JSON.stringify({
           id: userCreds.user.id,
-          role: Roles.User,
+          role: userCreds.user.role,
         });
 
         const tokens = await this.generateTokens({
           id: userCreds.user.id,
-          role: Roles.User,
+          role: userCreds.user.role,
         });
 
         const newSession = await this.sessionService.createSession(
@@ -217,7 +217,7 @@ export class AuthService {
 
     const payload = {
       id: refresh.user.id,
-      role: Roles.User,
+      role: refresh.user.role,
     };
     const tokens = await this.generateTokens(payload);
 

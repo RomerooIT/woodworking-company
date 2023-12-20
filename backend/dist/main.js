@@ -1457,11 +1457,11 @@ let AuthService = class AuthService {
                 const sessionId = `session-${Date.now()}-${(0, uuid_1.v4)()}`;
                 const payload = JSON.stringify({
                     id: userCreds.user.id,
-                    role: core_1.Roles.User,
+                    role: userCreds.user.role,
                 });
                 const tokens = await this.generateTokens({
                     id: userCreds.user.id,
-                    role: core_1.Roles.User,
+                    role: userCreds.user.role,
                 });
                 const newSession = await this.sessionService.createSession(sessionId, userCreds.user, payload);
                 await this.refreshTokenRepository.save({
@@ -1526,7 +1526,7 @@ let AuthService = class AuthService {
         }
         const payload = {
             id: refresh.user.id,
-            role: core_1.Roles.User,
+            role: refresh.user.role,
         };
         const tokens = await this.generateTokens(payload);
         const sessionId = `session-${Date.now()}-${(0, uuid_1.v4)()}`;
