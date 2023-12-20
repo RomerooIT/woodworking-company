@@ -2303,7 +2303,7 @@ __decorate([
     __metadata("design:type", typeof (_c = typeof worker_entity_1.WorkerEntity !== "undefined" && worker_entity_1.WorkerEntity) === "function" ? _c : Object)
 ], RequestEntity.prototype, "worker", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true, default: 'Awaiting confirmation..' }),
+    (0, typeorm_1.Column)({ nullable: true, default: 'Ожидание подтверждения...' }),
     __metadata("design:type", String)
 ], RequestEntity.prototype, "status", void 0);
 RequestEntity = __decorate([

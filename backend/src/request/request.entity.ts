@@ -16,7 +16,7 @@ export class RequestEntity {
   @ManyToOne(() => ProductEntity, { nullable: false })
   @JoinColumn()
   product: ProductEntity
-
+  
   // @ManyToOne(() => BasketEntity, (entity) => entity.request)
   // @JoinColumn()
   // basket: BasketEntity
@@ -34,6 +34,6 @@ export class RequestEntity {
   @JoinColumn()
   worker?: WorkerEntity
 
-  @Column({nullable: true, default: 'Awaiting confirmation..'})
+  @Column({nullable: true, default: 'Ожидание подтверждения...'})
   status?: string;
 }
