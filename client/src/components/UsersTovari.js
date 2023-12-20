@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
-import ModalAddProduct from './ModalAddProduct';
-import ModalEditProduct from './ModalEditProduct';
-import ModalDeleteProduct from './ModalDeleteProduct';
-import ModalOrder from './Order'; // Corrected import
+import ModalOrder from './Order';
 import { ShowProduct } from '../https/workersAPI';
 import '../styles/index.css';
 
@@ -39,10 +36,7 @@ const ProductRow = ({ id, material, materialtype, price, onSelect, selected, set
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [isOrderModalOpen, setOrderModalOpen] = useState(false); // Added state for the order modal
+  const [isOrderModalOpen, setOrderModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -65,36 +59,9 @@ const ProductList = () => {
     setSelectedProduct(selected);
   };
 
-  const handleOpenModal = () => {
-    setModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  };
-
-  const handleEditClick = () => {
-    if (selectedProduct) {
-      setEditModalOpen(true);
-    } else {
-      console.warn('Выберите продукт для редактирования.');
-    }
-  };
-
-  const handleCloseEditModal = () => {
-    setEditModalOpen(false);
-  };
-
-  const handleDeleteClick = () => {
-    if (selectedProduct) {
-      setDeleteModalOpen(true);
-    } else {
-      console.warn('Выберите продукт для удаления.');
-    }
-  };
-
-  const handleCloseDeleteModal = () => {
-    setDeleteModalOpen(false);
+  const handleOrderClick = () => {
+    console.log('Кнопка "Заказать" нажата');
+    setOrderModalOpen(true); // Open the order modal
   };
 
   return (
@@ -104,24 +71,13 @@ const ProductList = () => {
           <h1>Товары:</h1>
         </div>
         <div className="col-md-6 text-right">
-          <Button variant="success" className="mr-2" onClick={handleOpenModal}>
-            Добавить
-          </Button>{' '}
           <Button
-            variant="primary"
-            className="mr-2"
-            onClick={handleEditClick}
+            variant="warning"
+            style={{ marginLeft: 'auto' }}
+            onClick={handleOrderClick}
             disabled={!selectedProduct}
           >
-            Редактировать
-          </Button>{' '}
-          <Button
-            variant="danger"
-            className="mr-3"
-            onClick={handleDeleteClick}
-            disabled={!selectedProduct}
-          >
-            Удалить
+            Заказать
           </Button>
         </div>
       </div>
@@ -137,20 +93,6 @@ const ProductList = () => {
           setSelected={setSelectedProduct}
         />
       ))}
-      <ModalAddProduct active={isModalOpen} setActive={handleCloseModal} />
-      <ModalEditProduct
-        active={isEditModalOpen}
-        setActive={handleCloseEditModal}
-        productToEdit={selectedProduct}
-        productId={selectedProduct ? selectedProduct.id : null}
-        newSelected={selectedProduct}
-      />
-      <ModalDeleteProduct
-        active={isDeleteModalOpen}
-        setActive={handleCloseDeleteModal}
-        productId={selectedProduct ? selectedProduct.id : null}
-        newSelected={selectedProduct}
-      />
       <ModalOrder 
       active={isOrderModalOpen} 
       setActive={() => setOrderModalOpen(false)}

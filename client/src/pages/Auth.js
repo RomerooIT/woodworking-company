@@ -7,7 +7,7 @@ import { NavLink, useLocation, useHistory } from 'react-router-dom';
 import { LOGIN_ROUTE, REGISTRATION_ROUTE } from '../utils/consts';
 
 import { observer } from 'mobx-react-lite';
-import axios from 'axios'; // Импортируем axios
+import axios from 'axios';
 import { Context } from '../index';
 
 const Auth = observer(() => {
@@ -22,43 +22,42 @@ const Auth = observer(() => {
 
   const handleClick = async () => {
     try {
-      let data;
+      let response;
+
       if (isLogin) {
-        // For user login
-        const response = await axios.post('http://localhost:7891/api/auth/sign-in', {
+        response = await axios.post('http://localhost:7891/api/auth/sign-in', {
           email,
           password,
         });
-  
-        // Check the success of login
-        if (response.status === 201) {
-          alert('Авторизация прошла успешно.');
-          // Additional logic after successful login
-          // For example, you might set the user in your MobX store
-          user.setUser(response.data); // Assuming you have a setUser method in your MobX store
-          //redirect
-        } else {
-          alert('Что-то пошло не так при авторизации.');
-        }
       } else {
-        // For user registration
-        const response = await axios.post('http://localhost:7891/api/auth/sign-up', {
+        response = await axios.post('http://localhost:7891/api/auth/sign-up', {
           email,
           password,
           name,
           surname,
         });
-  
-        // Check the success of registration
-        if (response.status === 201) {
-          alert('Регистрация прошла успешно.');
-          // Additional logic after successful registration
-        } else {
-          alert('Что-то пошло не так при регистрации.');
-        }
       }
-    } catch (e) {
-      alert(e.response.data.message);
+
+      // Проверяем, что статус ответа 201 и в теле ответа есть refreshToken
+      if (response.status === 201 && response.data?.refreshToken) 
+      {
+        // Сохраняем refreshToken в localStorage под именем REFRESH_TOKEN
+        localStorage.setItem('REFRESH_TOKEN', response.data.refreshToken);
+
+        alert(isLogin ? 'Авторизация прошла успешно.' : 'Регистрация прошла успешно.');
+
+        // Устанавливаем контекст пользователя, если это необходимо
+        user.setUser(response.data);
+
+        // Редирект на страницу ./Account
+        history.push('./Account');
+        window.location.reload();
+      } else {
+        alert(isLogin ? 'Что-то пошло не так при авторизации.' : 'Что-то пошло не так при регистрации.');
+      }
+    } catch (error) {
+      // Обрабатываем ошибки, выводим сообщение об ошибке
+      alert(error.response ? error.response.data.message : 'Что-то пошло не так.');
     }
   };
 

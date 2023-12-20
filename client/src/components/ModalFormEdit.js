@@ -16,11 +16,7 @@ const updateWorker = async (id, data) => {
 };
 
 const ModalFormEdit = ({ active, setActive, info, handleEdit, id }) => {
-  const [editedData, setEditedData] = useState({ ...info });
-
-  useEffect(() => {
-    setEditedData({ ...info });
-  }, [info]);
+  const [editedData, setEditedData] = useState(info);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

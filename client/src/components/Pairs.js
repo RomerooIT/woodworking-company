@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import {
-  MDBCard,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCardText,
-  MDBRow,
-  MDBCol,
-} from 'mdb-react-ui-kit';
+import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+import { MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBRow, MDBCol } from 'mdb-react-ui-kit';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
+import EditRequestModal from './EditRequestModal';
 
 const Pairs = () => {
   const [pairsData, setPairsData] = useState([]);
   const [userId, setUserId] = useState(0);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedRequestId, setSelectedRequestId] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('REFRESH_TOKEN');
@@ -23,9 +21,9 @@ const Pairs = () => {
   }, []);
 
   useEffect(() => {
-    // Проверка, присутствует ли userId
+    // Check if userId is present
     if (userId) {
-      // Запрос к API, используя userId
+      // Fetch data from API using userId
       fetch(`http://127.0.0.1:7891/api/request/getUserRequests?userId=${userId}`)
         .then(response => response.json())
         .then(data => {
@@ -43,7 +41,7 @@ const Pairs = () => {
       const decoded = JSON.parse(atob(token.split('.')[1]));
       return decoded;
     } catch (error) {
-      console.error('Ошибка декодирования токена:', error);
+      console.error('Token decoding error:', error);
       return {};
     }
   };
@@ -71,43 +69,79 @@ const Pairs = () => {
     }
   }, [pairsData]);
 
+  const handleOpenEditModal = (requestId) => {
+    setSelectedRequestId(requestId);
+    setShowEditModal(true);
+  };
+
   return (
-    <div className="w-75 ms-auto me-auto mt-2">
+    <div className="container mt-2">
       {pairsData.length === 0 ? (
-        <p>No data available</p>
+        <p>Сделайте заказ во вкладке "Товары"</p>
       ) : (
-        <MDBRow className="row-cols-1 row-cols-md-5 g-4">
+        <MDBRow className="row-cols-1 row-cols-md-2 g-4">
           {pairsData.map((item, index) => (
             <MDBCol key={index}>
               <MDBCard className="m-1" shadow="0" border="dark" background="dark">
                 <MDBCardBody className="text-dark">
                   <MDBCardTitle className="text-white font-weight-bolder">Заявка</MDBCardTitle>
                   <MDBCardText className="text-white">
-                    <p className="font-weight-bolder">Адрес:</p>
-                    <p> {item.customerAddress}</p>
-                    <p className="font-weight-bolder">Количество заказанного товара:</p>
-                    <p>{item.amount}</p>
-                    <p className="font-weight-bolder">Указанные требования:</p>
-                    <p>{item.requirements}</p>
-                    <p className="font-weight-bolder">Статус:</p>
-                    <p>{item.status}</p>
+                    <hr className="my-2" />
+                    <div className="mb-3">
+                      <p className="font-weight-bolder">Адрес:</p>
+                      <p>{item.customerAddress || 'N/A'}</p>
+                    </div>
+                    <hr className="my-2" />
+                    <div className="mb-3">
+                      <p className="font-weight-bolder">Количество заказанного товара:</p>
+                      <p>{item.amount || 'N/A'}</p>
+                    </div>
+                    <hr className="my-2" />
+                    <div className="mb-3">
+                      <p className="font-weight-bolder">Требования:</p>
+                      <p>{item.requirements || 'N/A'}</p>
+                    </div>
+                    <hr className="my-2" />
                     {item.productDetails && (
-                      <>
+                      <div>
                         <p className="font-weight-bolder">Наименование товара:</p>
-                        <p>{item.productDetails.material}</p>
+                        <p>{item.productDetails.material || 'N/A'}</p>
+                        <hr className="my-2" />
                         <p className="font-weight-bolder">Материал:</p>
-                        <p>{item.productDetails.materialtype}</p>
+                        <p>{item.productDetails.materialtype || 'N/A'}</p>
+                        <hr className="my-2" />
                         <p className="font-weight-bolder">Цена:</p>
-                        <p>{item.productDetails.price} BYN</p>
-                      </>
+                        <p>{item.productDetails.price || 'N/A'} BYN</p>
+                      </div>
                     )}
+                    <hr className="my-2" />
+                    <div className="mb-3">
+                      <p className="font-weight-bolder">Статус заявки:</p>
+                      <span className="status-badge bg-secondary text-white p-1 rounded">
+                        {item.status || 'Awaiting confirmation'}
+                      </span>
+                    </div>
                   </MDBCardText>
+                  <FontAwesomeIcon
+                    icon={faPencilAlt}
+                    className="btn btn-secondary ml-auto mb-2"
+                    style={{ marginRight: '15px' }}
+                    onClick={() => handleOpenEditModal(item.id)}
+                  />
                 </MDBCardBody>
               </MDBCard>
             </MDBCol>
           ))}
         </MDBRow>
       )}
+      <EditRequestModal
+        showModal={showEditModal}
+        handleCloseModal={() => setShowEditModal(false)}
+        requestId={selectedRequestId}
+        handleEditRequest={(requestId, editedData) => {
+          console.log('Edited request data:', requestId, editedData);
+        }}
+      />
     </div>
   );
 };

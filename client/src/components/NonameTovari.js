@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from 'react-bootstrap';
 import ModalAddProduct from './ModalAddProduct';
 import ModalEditProduct from './ModalEditProduct';
 import ModalDeleteProduct from './ModalDeleteProduct';
@@ -97,34 +96,13 @@ const ProductList = () => {
     setDeleteModalOpen(false);
   };
 
+  const handleOrderClick = () => {
+    console.log('Кнопка "Заказать" нажата');
+    setOrderModalOpen(true); // Open the order modal
+  };
+
   return (
     <div className="container main-content">
-      <div className="row">
-        <div className="col-md-6">
-          <h1>Товары:</h1>
-        </div>
-        <div className="col-md-6 text-right">
-          <Button variant="success" className="mr-2" onClick={handleOpenModal}>
-            Добавить
-          </Button>{' '}
-          <Button
-            variant="primary"
-            className="mr-2"
-            onClick={handleEditClick}
-            disabled={!selectedProduct}
-          >
-            Редактировать
-          </Button>{' '}
-          <Button
-            variant="danger"
-            className="mr-3"
-            onClick={handleDeleteClick}
-            disabled={!selectedProduct}
-          >
-            Удалить
-          </Button>
-        </div>
-      </div>
       {products.map((product) => (
         <ProductRow
           key={product.id}
