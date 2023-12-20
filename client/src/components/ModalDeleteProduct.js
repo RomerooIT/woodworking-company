@@ -8,7 +8,7 @@ const ModalDeleteProduct = ({ active, setActive, newSelected, onDelete }) => {
   };
 
   const handleDelete = async () => {
-    const url = `https://127.0.0.1:7891/api/product/${newSelected}`;
+    const url = `http://127.0.0.1:7891/api/product/${newSelected}`;
 
     try {
       const response = await axios({

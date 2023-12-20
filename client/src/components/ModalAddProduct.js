@@ -32,7 +32,7 @@ const ModalProductAdd = ({ active, setActive, handleSave }) => {
     };
 
     // Здесь вы можете использовать свой URL и метод запроса (в данном случае POST)
-    fetch('https://localhost:7891/api/product', {
+    fetch('http://localhost:7891/api/product', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

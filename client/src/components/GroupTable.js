@@ -50,7 +50,7 @@ const WorkersTable = () => {
   };
 
   useEffect(() => {
-    fetch('https://localhost:7891/api/worker')
+    fetch('http://localhost:7891/api/worker')
       .then(response => response.json())
       .then(data => setApiData(data))
       .catch(error => console.error(error));

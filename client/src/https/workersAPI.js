@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export async function AddWorker() 
 {
-  const url = `https://localhost:7891/api/worker`;
+  const url = `http://localhost:7891/api/worker`;
 
   try {
     const response = await axios({
@@ -23,7 +23,7 @@ export async function AddWorker()
 
 export async function ShowProduct() 
 {
-  const url = `https://localhost:7891/api/product/`;
+  const url = `http://localhost:7891/api/product/`;
 
   try {
     const response = await axios({

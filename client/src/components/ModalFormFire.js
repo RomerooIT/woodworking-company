@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import axios from 'axios';
 
-const baseURL = 'https://localhost:7891/api/worker';
+const baseURL = 'http://localhost:7891/api/worker';
 
 const deleteWorker = async (id) => {
   const url = `${baseURL}/${id}`;

@@ -26,7 +26,7 @@ const Pairs = () => {
     // Проверка, присутствует ли userId
     if (userId) {
       // Запрос к API, используя userId
-      fetch(`https://127.0.0.1:7891/api/request/getUserRequests?userId=${userId}`)
+      fetch(`http://127.0.0.1:7891/api/request/getUserRequests?userId=${userId}`)
         .then(response => response.json())
         .then(data => {
           console.log('API Data:', data);
@@ -53,7 +53,7 @@ const Pairs = () => {
     const fetchProductDetails = async () => {
       const updatedPairsData = await Promise.all(
         pairsData.map(async (item) => {
-          const productResponse = await fetch(`https://127.0.0.1:7891/api/product/${item.productId}`);
+          const productResponse = await fetch(`http://127.0.0.1:7891/api/product/${item.productId}`);
           const productData = await productResponse.json();
 
           return {

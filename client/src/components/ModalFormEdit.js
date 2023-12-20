@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
 
-const baseURL = 'https://127.0.0.1:7891/api/worker';
+const baseURL = 'http://127.0.0.1:7891/api/worker';
 
 const updateWorker = async (id, data) => {
   const url = `${baseURL}/${id}`;

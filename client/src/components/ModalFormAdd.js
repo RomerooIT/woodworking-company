@@ -38,7 +38,7 @@ const ModalFormAdd = ({ active, setActive, handleSave }) => {
       currentstate: editedData.currentstate,
     };
 
-    fetch('https://localhost:7891/api/worker', {
+    fetch('http://localhost:7891/api/worker', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

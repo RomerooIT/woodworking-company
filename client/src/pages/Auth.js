@@ -25,7 +25,7 @@ const Auth = observer(() => {
       let data;
       if (isLogin) {
         // For user login
-        const response = await axios.post('https://localhost:7891/api/auth/sign-in', {
+        const response = await axios.post('http://localhost:7891/api/auth/sign-in', {
           email,
           password,
         });
@@ -42,7 +42,7 @@ const Auth = observer(() => {
         }
       } else {
         // For user registration
-        const response = await axios.post('https://localhost:7891/api/auth/sign-up', {
+        const response = await axios.post('http://localhost:7891/api/auth/sign-up', {
           email,
           password,
           name,

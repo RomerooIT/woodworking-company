@@ -65,7 +65,7 @@ const ModalOrderAdd = ({ active, setActive, handleSave, newSelected, products })
       requirements: editedOrder.requirements,
     };
 
-    fetch('https://localhost:7891/api/request', {
+    fetch('http://localhost:7891/api/request', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

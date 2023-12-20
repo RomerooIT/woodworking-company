@@ -32,7 +32,7 @@ const ModalEditProduct = ({ active, setActive, handleSave, productToEdit, produc
       price: price,
     };
 
-    fetch(`https://localhost:7891/api/product/${newSelected}`, {
+    fetch(`http://localhost:7891/api/product/${newSelected}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
