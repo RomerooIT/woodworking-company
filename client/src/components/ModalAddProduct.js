@@ -67,7 +67,7 @@ const ModalProductAdd = ({ active, setActive, handleSave }) => {
       <Modal.Body>
         <Form>
           <Form.Group controlId="formMaterial">
-            <Form.Label>Материал</Form.Label>
+            <Form.Label>Наименование товара</Form.Label>
             <Form.Control
               type="text"
               name="material"

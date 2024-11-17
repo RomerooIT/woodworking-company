@@ -2,6 +2,7 @@ import React from 'react';
 import {Routes, Redirect} from "react-router-dom";
 import {authRoutes, publicRoutes} from '../routes'
 import {ERROR_ROUTE} from "../utils/consts";
+import {ACCOUNT_ROUTE} from "../utils/consts";
 import { Navigate } from 'react-router-dom';
 import {Context} from "../index";
 import { Route, Switch } from "react-router-dom";
@@ -16,7 +17,7 @@ const AppRouter = () => {
             {publicRoutes.map(({path, Component}) =>
                 <Route key={path} path={path} component={Component} exact/>
             )}
-            <Redirect to={ERROR_ROUTE}/>
+            <Redirect to={ACCOUNT_ROUTE}/>
         </Switch>
     );
 };

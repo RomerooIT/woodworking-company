@@ -44,7 +44,7 @@ const NavBar = () => {
               <Nav.Link href="/Group">Сотрудники</Nav.Link>
               <Nav.Link href="/Requests">АдминЗаявки</Nav.Link>
               <Nav.Link href="/Timetable">Товары</Nav.Link>
-              <Nav.Link href="/AdminSupport">ТехподдержкаАдмин</Nav.Link>
+     {/*       <Nav.Link href="/AdminSupport">ТехподдержкаАдмин</Nav.Link> */}
             </>
           )}
 
@@ -52,7 +52,7 @@ const NavBar = () => {
             <>
               <Nav.Link href="/Workmaterials">МоиЗаявки</Nav.Link>
               <Nav.Link href="/TovariUsers">Товары</Nav.Link>
-              <Nav.Link href="/SupportUser">Техподдержка</Nav.Link>
+  {/*         <Nav.Link href="/SupportUser">Техподдержка</Nav.Link> */}
             </>
           )}
         </Nav>

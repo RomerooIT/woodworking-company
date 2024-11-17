@@ -19,6 +19,7 @@ const Auth = observer(() => {
   const [password, setPassword] = useState('');
   const [name, setFirstName] = useState('');
   const [surname, setLastName] = useState('');
+  const [infoMessage, setInfoMessage] = useState(''); // Для сообщения пользователю
 
   const handleClick = async () => {
     try {
@@ -38,25 +39,24 @@ const Auth = observer(() => {
         });
       }
 
-      // Проверяем, что статус ответа 201 и в теле ответа есть refreshToken
-      if (response.status === 201 && response.data?.refreshToken) 
-      {
-        // Сохраняем refreshToken в localStorage под именем REFRESH_TOKEN
-        localStorage.setItem('REFRESH_TOKEN', response.data.refreshToken);
+      // Если регистрация успешна
+      if (response.status === 201) {
+        if (response.data?.refreshToken) {
+          // Если refreshToken есть
+          localStorage.setItem('REFRESH_TOKEN', response.data.refreshToken);
 
-        alert(isLogin ? 'Авторизация прошла успешно.' : 'Регистрация прошла успешно.');
-
-        // Устанавливаем контекст пользователя, если это необходимо
-        user.setUser(response.data);
-
-        // Редирект на страницу ./Account
-        history.push('./Account');
-        window.location.reload();
+          alert('Регистрация прошла успешно.');
+          user.setUser(response.data);
+          history.push('./Account');
+          window.location.reload();
+        } else {
+          // Если только отправлено письмо для подтверждения
+          setInfoMessage('Сообщение было отправлено на ваш адрес электронной почты.');
+        }
       } else {
-        alert(isLogin ? 'Что-то пошло не так при авторизации.' : 'Что-то пошло не так при регистрации.');
+        alert('Что-то пошло не так при регистрации.');
       }
     } catch (error) {
-      // Обрабатываем ошибки, выводим сообщение об ошибке
       alert(error.response ? error.response.data.message : 'Что-то пошло не так.');
     }
   };
@@ -101,6 +101,10 @@ const Auth = observer(() => {
             onChange={(e) => setPassword(e.target.value)}
             type="password"
           />
+
+          {infoMessage && ( // Отображаем сообщение, если оно есть
+            <div className="mt-3 alert alert-info">{infoMessage}</div>
+          )}
 
           <Row className="d-flex justify-content-between mt-3 pl-3 pr-3">
             {isLogin ? (

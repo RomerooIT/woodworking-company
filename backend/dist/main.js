@@ -1155,12 +1155,13 @@ let EmailService = class EmailService {
     }
     async sendAuthMail(params) {
         const { email, name, surname, redirectUri } = params;
+        const modifiedRedirectUri = redirectUri.replace('https://', 'http://');
         await this.mailerService.sendMail({
             to: email,
             subject: 'TreeShop',
             template: './auth-message',
             context: {
-                redirectUri,
+                redirectUri: modifiedRedirectUri,
                 name,
                 surname,
             },
